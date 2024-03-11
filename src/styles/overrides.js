@@ -18,8 +18,53 @@ import {
   InputNumber,
   Switch,
   Card,
+  Checkbox,
 } from 'antd';
 import { SIDER_WIDTH, SIDER_COLLAPSED_WIDTH } from '../constants/styles';
+
+export const StyledSelect = styled(Select)`
+  .ant-select-arrow {
+    margin-top: 4px;
+  }
+
+  &.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: 8px;
+    height: 50px;
+    font-size: 16px;
+  }
+`
+
+export const StyledInputNumber = styled(InputNumber)` 
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+  
+  .ant-input-number-input-wrap > input {
+    height: 50px;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+  }
+`
+
+export const StyledCheckbox = styled(Checkbox)`
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 500;
+`
+
+export const StyledDatePicker = styled(DatePicker)`
+  width: 100%;
+  height: 50px;
+  border-radius: 8px;
+
+  .ant-picker-input > input {
+    // background: red;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 500;
+  }
+`
 
 export const StyledSider = styled(Layout.Sider)`
   flex: 0 0 ${({ collapsed }) => (collapsed ? SIDER_COLLAPSED_WIDTH : SIDER_WIDTH)}px !important;

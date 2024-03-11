@@ -1,3 +1,7 @@
+import {
+  message,
+} from "antd";
+
 export const generateLink = (pathElements) => {
   // Reverse the array to match the order you specified
   pathElements.reverse();
@@ -33,3 +37,16 @@ export const convertFileToBase64 = (file) =>
       });
     reader.onerror = reject;
   });
+
+export const validateFile = (file) => {
+  // console.log("file", file);
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt10M = file.size / 1024 / 1024 < 10;
+  if (!isLt10M) {
+    message.error("Your image must less than 10MB");
+  }
+  return isJpgOrPng && isLt10M;
+};

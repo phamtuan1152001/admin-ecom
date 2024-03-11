@@ -5,27 +5,30 @@ import moment from "moment";
 
 // @utility
 import { uploadImg } from '../../../utility/UploadImg';
+import { validateFile } from "../../../utility";
 
 // @components
 import {
   Form,
   Button,
-  notification,
-  Select,
-  DatePicker,
   Modal,
   Upload,
-  message,
-  Spin,
 } from "antd";
-const { Option } = Select;
-import { PlusOutlined } from "@ant-design/icons";
-import { StyledForm, StyledFormItem, StyledButton, StyledInput, StyledInputPassword } from "../../../styles/overrides";
-// import Ckeditor from "../../../components/Ckeditors"
+import {
+  StyledFormItem,
+  StyledButton,
+  StyledInput,
+  StyledDatePicker,
+  StyledCheckbox,
+  StyledInputNumber,
+  StyledSelect
+} from "../../../styles/overrides";
 import Ckeditor from "../../../components/Ckeditors";
+import UploadButton from "./components/upload-button";
 
 // @constants
 import { SUCCESS } from '../../../constants';
+import { getAllCategories } from "../../../services/service-common";
 
 function CreateProduct() {
   const [form] = Form.useForm();
@@ -37,51 +40,43 @@ function CreateProduct() {
   const [loading, setLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
 
-  const [imgBase64, setImgBase64] = useState();
-  const [loadingUpload, setLoadingUpload] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+
+  const [loadingUpload, setLoadingUpload] = useState(false);
   const [fileList, setFileList] = useState([]);
 
-  // useEffect(() => {
-  //   if (idProduct) {
-  //     fetchDetailProduct();
-  //     // handleFormChange();
-  //   }
-  // }, []);
+  const [listCategories, setListCategories] = useState([])
 
-  // useEffect(async () => {
-  //   if (imgBase64) {
-  //     try {
-  //       setLoadingUpload(true);
-  //       const res = await uploadImg(imgBase64);
-  //       if (res?.status === 200) {
-  //         const listImg = {
-  //           uid: res?.data?.version_id,
-  //           url: res?.data?.secure_url,
-  //         };
-  //         setFileList((prev) => [...prev, listImg]);
-  //         setImgBase64();
-  //       }
-  //     } catch (err) {
-  //       console.log("FETCH FAIL!", err);
-  //     } finally {
-  //       setLoadingUpload(false);
-  //     }
-  //   }
-  // }, [imgBase64]);
+
+  useEffect(() => {
+    fetchGetAllCategories()
+  }, [])
+
+  const fetchGetAllCategories = async () => {
+    try {
+      const userId = JSON.parse(localStorage.getItem("USER_INFO"))?.id
+      const res = await getAllCategories(userId)
+      if (res?.retCode === SUCCESS) {
+        const { retData } = res || {}
+        const list = retData?.map((item) => {
+          return {
+            value: item?._id,
+            label: item?.name,
+            ...item
+          }
+        })
+        setListCategories(list)
+      }
+      // console.log("res", res)
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
+    }
+  }
 
   const disabledDate = (current) => {
     const LIMIT_YEAR = 1900;
     return current && current.year() < LIMIT_YEAR;
-  };
-
-  const getBase64Img = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgBase64(reader.result);
-    };
   };
 
   const onFinish = async (values) => {
@@ -128,44 +123,61 @@ function CreateProduct() {
   const handleFormChange = () => {
     const hasErrors = form.getFieldsError().some(({ errors }) => errors.length);
     const hasValues = form.getFieldsValue();
+    // console.log("hasValues", hasValues);
     setIsDisable(
       hasErrors ||
+      !hasValues?.code ||
       !hasValues?.name ||
+      !hasValues?.slug ||
       !hasValues?.description ||
       // !hasValues?.image ||
-      !hasValues?.price ||
-      !hasValues?.gender ||
-      !hasValues?.age ||
-      !hasValues?.weight ||
-      !hasValues?.location ||
-      !hasValues?.dob
+      !hasValues?.regularPrice ||
+      !hasValues?.salePrice ||
+      !hasValues?.categories ||
+      !hasValues?.status
     );
   };
 
   const handleCancel = () => setPreviewOpen(false);
-
-  const validateFile = (file) => {
-    // console.log("hihi", file);
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt10M = file.size / 1024 / 1024 < 10;
-    if (!isLt10M) {
-      message.error("Your image must less than 10MB");
-    }
-    return isJpgOrPng && isLt10M;
-  };
 
   const handlePreview = async (file) => {
     setPreviewImage(file.url);
     setPreviewOpen(true);
   };
 
+  const getBase64Img = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      fetchUploadImg(reader.result)
+    };
+  };
+  const fetchUploadImg = async (img) => {
+    // console.log("img", img);
+    if (img) {
+      try {
+        setLoadingUpload(true);
+        const res = await uploadImg(img);
+        if (res?.status === 200) {
+          const listImg = {
+            uid: res?.data?.version_id,
+            url: res?.data?.secure_url,
+          };
+          setFileList((prev) => [...prev, listImg]);
+        }
+      } catch (err) {
+        console.log("FETCH FAIL!", err);
+      } finally {
+        setLoadingUpload(false);
+      }
+    }
+  }
+
   const handleChange = async (props) => {
     const { file, fileList } = props || {};
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (isJpgOrPng) await getBase64Img(file?.originFileObj);
+    // console.log("file", file);
+    if (isJpgOrPng) await getBase64Img(file?.originFileObj)
   };
 
   const handleRemove = (e) => {
@@ -173,14 +185,6 @@ function CreateProduct() {
     const fileRemoved = fileList?.filter((item) => item?.uid !== e?.uid);
     setFileList(fileRemoved);
   };
-
-  const uploadButton = (
-    <Spin spinning={loadingUpload}>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </Spin>
-  );
-
 
   return (
     <React.Fragment>
@@ -192,8 +196,22 @@ function CreateProduct() {
         onFieldsChange={handleFormChange}
         className=""
         requiredMark={false}
+        initialValues={{
+          code: "",
+          name: "",
+          slug: "",
+          images: [],
+          description: "",
+          regularPrice: 0,
+          salePrice: 0,
+          onSale: false,
+          dateOnSaleFrom: "",
+          dateOnSaleTo: "",
+          categories: listCategories[0]?._id,
+          status: "draft"
+        }}
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-6">
           <div>
             <StyledFormItem
               name="code"
@@ -207,7 +225,6 @@ function CreateProduct() {
               ]}
             >
               <StyledInput
-                autoFocus
                 className=""
                 placeholder={`Enter your product code`}
               />
@@ -225,7 +242,7 @@ function CreateProduct() {
               ]}
             >
               <StyledInput
-                autoFocus
+
                 className=""
                 placeholder={`Enter your product name`}
               />
@@ -243,69 +260,175 @@ function CreateProduct() {
               ]}
             >
               <StyledInput
-                autoFocus
+
                 className=""
                 placeholder={`Enter your product slug`}
               />
             </StyledFormItem>
+
+            <StyledFormItem
+              name="images"
+              className=""
+              label={`Image`}
+            >
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                customRequest={(options) => {
+                  const { file } = options || {};
+                  options.onSuccess(file, options.file);
+                }}
+                beforeUpload={validateFile}
+                onPreview={handlePreview}
+                onChange={handleChange}
+                onRemove={(e) => handleRemove(e)}
+              >
+                {fileList.length >= 8 ? null : <UploadButton loading={loadingUpload} />}
+              </Upload>
+              <Modal
+                open={previewOpen}
+                title={""}
+                footer={null}
+                onCancel={handleCancel}
+                centered
+              >
+                <img
+                  alt="preview-img"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
+              </Modal>
+            </StyledFormItem>
           </div>
-          <div>pham le song tuan</div>
-          {/* <StyledFormItem
-            name="image"
-            className="form-custom col-6 ps-3 pe-3"
-            label={`Image`}
-          >
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              customRequest={(options) => {
-                const { file } = options || {};
-                options.onSuccess(file, options.file);
-              }}
-              beforeUpload={validateFile}
-              onPreview={handlePreview}
-              onChange={handleChange}
-              onRemove={(e) => handleRemove(e)}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-            <Modal
-              open={previewOpen}
-              title={""}
-              footer={null}
-              onCancel={handleCancel}
-              centered
-            >
-              <img
-                alt="preview-img"
-                style={{ width: "100%" }}
-                src={previewImage}
-              />
-            </Modal>
-          </StyledFormItem> */}
+
+          <div>
+            <div className="grid grid-cols-2 gap-4">
+              <StyledFormItem
+                name="regularPrice"
+                className=""
+                label={`Regular price`}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please, enter your product Regular price",
+                  },
+                ]}
+              >
+                <StyledInputNumber
+
+                  className=""
+                  placeholder={`Enter your product Regular price`}
+                />
+              </StyledFormItem>
+
+              <StyledFormItem
+                name="salePrice"
+                className=""
+                label={`Sale price`}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please, enter your product Sale price",
+                  },
+                ]}
+              >
+                <StyledInputNumber
+
+                  className=""
+                  placeholder={`Enter your product Sale price`}
+                />
+              </StyledFormItem>
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-4">
+              <StyledFormItem
+                name="onSale"
+                className="col-span-2"
+                label={`Is on sale ?`}
+                valuePropName="checked"
+              >
+                <StyledCheckbox>On sale</StyledCheckbox>
+              </StyledFormItem>
+
+              <StyledFormItem
+                name="dateOnSaleFrom"
+                className=""
+                label={`Sale from`}
+              >
+                <StyledDatePicker
+                  disabledDate={disabledDate}
+                  placeholder={`Sale from`}
+                  className=""
+                  style={{ fontSize: 20 }}
+                />
+              </StyledFormItem>
+
+              <StyledFormItem
+                name="dateOnSaleTo"
+                className=""
+                label={`Sale to`}
+              >
+                <StyledDatePicker
+                  disabledDate={disabledDate}
+                  placeholder={`Sale to`}
+                  className=""
+                  style={{ fontSize: 20 }}
+                />
+              </StyledFormItem>
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-4">
+              <StyledFormItem
+                name="categories"
+                className=""
+                label={`Category`}
+              >
+                <StyledSelect
+                  placeholder="Select a category"
+                  options={listCategories}
+                />
+              </StyledFormItem>
+
+              <StyledFormItem
+                name="status"
+                className=""
+                label={`Status`}
+              >
+                <StyledSelect
+                  defaultValue="draft"
+                  options={[
+                    {
+                      value: 'draft',
+                      label: 'Draft',
+                    },
+                    {
+                      value: 'publish',
+                      label: 'Publish',
+                    },
+                  ]}
+                />
+              </StyledFormItem>
+            </div>
+          </div>
         </div>
-        <div>
-          <StyledFormItem
-            name="description"
-            className="col-span-1"
-            label={`Description`}
-            rules={[
-              {
-                required: true,
-                message: "Please, enter your description",
-              },
-            ]}
-          >
-            <Ckeditor placeholder={"Enter news content"} />
-          </StyledFormItem>
-        </div>
+        <StyledFormItem
+          name="description"
+          className="col-span-1"
+          label={`Description`}
+          rules={[
+            {
+              required: true,
+              message: "Please, enter your description",
+            },
+          ]}
+        >
+          <Ckeditor placeholder={"Enter news content"} />
+        </StyledFormItem>
+
         <div className="flex flex-row justify-end items-center">
           <Button
-            // className={classNames({
-            //   "submit-btn": true,
-            //   disable: idProduct ? false : isDisable,
-            // })}
-            // disabled={idProduct ? false : isDisable}
+            className={"bg-[#333333] text-white text-base h-[40px]"}
+            disabled={isDisable}
             loading={loading}
             htmlType="submit"
           >
