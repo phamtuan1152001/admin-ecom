@@ -12,7 +12,7 @@ import { formatToCurrencyVND } from '../../../utility';
 import { EditIcon, DeleteIcon } from '../../../assets/svg';
 
 // @services
-import { getListProducts, deleteDetailProduct } from './service';
+import { getListProducts, deleteDetailProduct } from '../service';
 
 // @constants
 import {

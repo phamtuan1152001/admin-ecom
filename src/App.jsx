@@ -190,6 +190,7 @@ const App = () => {
             minHeight: 280,
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            overflow: 'auto',
           }}
         >
           <RoutesComponents />

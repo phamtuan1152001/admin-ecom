@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^6.2.0",
     "antd": "^5.15.2",
     "axios": "^1.6.7",
+    "ckeditor5-custom-build": "file:ckeditor5",
     "classnames": "^2.5.1",
     "moment": "^2.30.1",
     "react": "^18.2.0",
