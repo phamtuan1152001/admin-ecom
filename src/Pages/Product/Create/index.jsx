@@ -400,7 +400,7 @@ function CreateProduct() {
                 label={`Status`}
               >
                 <StyledSelect
-                  defaultValue="draft"
+                  // defaultValue="draft"
                   options={[
                     {
                       value: 'draft',
