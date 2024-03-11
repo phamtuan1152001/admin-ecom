@@ -5,7 +5,7 @@ import moment from "moment";
 
 // @utility
 import { uploadImg } from '../../../utility/UploadImg';
-import { validateFile } from "../../../utility";
+import { validateFile, convertToSlug } from "../../../utility";
 
 // @components
 import {
@@ -48,7 +48,6 @@ function CreateProduct() {
 
   const [listCategories, setListCategories] = useState([])
 
-
   useEffect(() => {
     fetchGetAllCategories()
   }, [])
@@ -73,6 +72,12 @@ function CreateProduct() {
       console.log("FETCHING FAIL!", err)
     }
   }
+
+  const handleConvertToSlug = () => {
+    const newName = form.getFieldValue('name');
+    const newSlug = convertToSlug(newName);
+    form.setFieldValue('slug', newSlug);
+  };
 
   const disabledDate = (current) => {
     const LIMIT_YEAR = 1900;
@@ -242,7 +247,7 @@ function CreateProduct() {
               ]}
             >
               <StyledInput
-
+                onChange={handleConvertToSlug}
                 className=""
                 placeholder={`Enter your product name`}
               />

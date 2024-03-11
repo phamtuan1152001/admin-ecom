@@ -1,6 +1,15 @@
-import {
-  message,
-} from "antd";
+import slugify from 'slugify';
+import { message } from "antd";
+
+
+export const convertToSlug = (value) => {
+  const slug = slugify(value, {
+    lower: true,
+    remove: /[*+~.()'"!:@,]/g,
+  });
+
+  return slug
+}
 
 export const generateLink = (pathElements) => {
   // Reverse the array to match the order you specified
