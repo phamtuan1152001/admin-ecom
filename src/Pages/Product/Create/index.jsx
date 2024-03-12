@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { useLocation } from "react-router-dom";
 import moment from "moment";
 
 // @utility
-import { uploadImg } from '../../../utility/UploadImg';
-import { validateFile, convertToSlug } from "../../../utility";
+import { convertToSlug } from "../../../utility";
 
 // @components
 import {
   Form,
   Button,
-  Modal,
-  Upload,
+  Image,
+  Radio
 } from "antd";
 import {
   StyledFormItem,
@@ -24,7 +22,7 @@ import {
   StyledSelect
 } from "../../../styles/overrides";
 import Ckeditor from "../../../components/Ckeditors";
-import UploadButton from "./components/upload-button";
+import UploadImage from "./components/Upload";
 
 // @constants
 import { SUCCESS } from '../../../constants';
@@ -33,20 +31,15 @@ import { getAllCategories } from "../../../services/service-common";
 function CreateProduct() {
   const [form] = Form.useForm();
   // const navigation = useNavigation();
-  const location = useLocation();
-
-  const { idProduct } = location.state || {};
 
   const [loading, setLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-
-  const [loadingUpload, setLoadingUpload] = useState(false);
-  const [fileList, setFileList] = useState([]);
-
   const [listCategories, setListCategories] = useState([])
+
+  const [listImages, setListImages] = useState([])
+  // const [dateStart, setDateStart] = useState('');
+  // const [dateEnd, setDateEnd] = useState('');
 
   useEffect(() => {
     fetchGetAllCategories()
@@ -77,11 +70,6 @@ function CreateProduct() {
     const newName = form.getFieldValue('name');
     const newSlug = convertToSlug(newName);
     form.setFieldValue('slug', newSlug);
-  };
-
-  const disabledDate = (current) => {
-    const LIMIT_YEAR = 1900;
-    return current && current.year() < LIMIT_YEAR;
   };
 
   const onFinish = async (values) => {
@@ -135,60 +123,13 @@ function CreateProduct() {
       !hasValues?.name ||
       !hasValues?.slug ||
       !hasValues?.description ||
-      // !hasValues?.image ||
       !hasValues?.regularPrice ||
-      !hasValues?.salePrice ||
       !hasValues?.categories ||
-      !hasValues?.status
+      !hasValues?.status ||
+      !hasValues?.defaultImageId
+      // !hasValues?.image ||
+      // !hasValues?.salePrice ||
     );
-  };
-
-  const handleCancel = () => setPreviewOpen(false);
-
-  const handlePreview = async (file) => {
-    setPreviewImage(file.url);
-    setPreviewOpen(true);
-  };
-
-  const getBase64Img = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      fetchUploadImg(reader.result)
-    };
-  };
-  const fetchUploadImg = async (img) => {
-    // console.log("img", img);
-    if (img) {
-      try {
-        setLoadingUpload(true);
-        const res = await uploadImg(img);
-        if (res?.status === 200) {
-          const listImg = {
-            uid: res?.data?.version_id,
-            url: res?.data?.secure_url,
-          };
-          setFileList((prev) => [...prev, listImg]);
-        }
-      } catch (err) {
-        console.log("FETCH FAIL!", err);
-      } finally {
-        setLoadingUpload(false);
-      }
-    }
-  }
-
-  const handleChange = async (props) => {
-    const { file, fileList } = props || {};
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    // console.log("file", file);
-    if (isJpgOrPng) await getBase64Img(file?.originFileObj)
-  };
-
-  const handleRemove = (e) => {
-    // console.log("e", e);
-    const fileRemoved = fileList?.filter((item) => item?.uid !== e?.uid);
-    setFileList(fileRemoved);
   };
 
   return (
@@ -213,7 +154,9 @@ function CreateProduct() {
           dateOnSaleFrom: "",
           dateOnSaleTo: "",
           categories: listCategories[0]?._id,
-          status: "draft"
+          status: "draft",
+          quantity: 0,
+          defaultImageId: ""
         }}
       >
         <div className="grid grid-cols-2 gap-6">
@@ -257,12 +200,6 @@ function CreateProduct() {
               name="slug"
               className=""
               label={`Slug`}
-              rules={[
-                {
-                  required: true,
-                  message: "Please, enter your product slug",
-                },
-              ]}
             >
               <StyledInput
 
@@ -276,37 +213,73 @@ function CreateProduct() {
               className=""
               label={`Image`}
             >
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                customRequest={(options) => {
-                  const { file } = options || {};
-                  options.onSuccess(file, options.file);
+              <UploadImage
+                values={listImages}
+                onChange={(images) => {
+                  console.log("images", images)
+                  setListImages(images)
                 }}
-                beforeUpload={validateFile}
-                onPreview={handlePreview}
-                onChange={handleChange}
-                onRemove={(e) => handleRemove(e)}
-              >
-                {fileList.length >= 8 ? null : <UploadButton loading={loadingUpload} />}
-              </Upload>
-              <Modal
-                open={previewOpen}
-                title={""}
-                footer={null}
-                onCancel={handleCancel}
-                centered
-              >
-                <img
-                  alt="preview-img"
-                  style={{ width: "100%" }}
-                  src={previewImage}
-                />
-              </Modal>
+              />
+            </StyledFormItem>
+
+            <StyledFormItem
+              name="defaultImageId"
+              className=""
+              label={`Default image`}
+              rules={[
+                {
+                  required: true,
+                  message: "Please, select the default image display",
+                },
+              ]}
+            >
+              {listImages?.length > 0
+                ? (
+                  <Radio.Group className="flex flex-row justify-start items-center gap-x-4">
+                    {listImages?.map((item, index) => {
+                      return (
+                        <div key={`${index}-${item?.uid}`} className="flex flex-col justify-between items-center gap-y-1 h-[100px]">
+                          <div className="flex flex-col justify-center items-center">
+                            <Image
+                              width={100}
+                              height={70}
+                              src={item?.url}
+                              preview={false}
+                              className="object-contain"
+                            />
+                          </div>
+                          <div className="flex flex-row justify-center items-center">
+                            <Radio className="mr-0" value={item?.uid} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </Radio.Group>
+                )
+                : <h2 className="text-base font-normal text-black">No images are available</h2>}
             </StyledFormItem>
           </div>
 
           <div>
+            <div className="grid grid-cols-2 gap-x-4">
+              <StyledFormItem
+                name="quantity"
+                className=""
+                label={`Quantity`}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please, enter your product quantity",
+                  },
+                ]}
+              >
+                <StyledInputNumber
+                  className=""
+                  placeholder={`Enter your product quantity`}
+                />
+              </StyledFormItem>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <StyledFormItem
                 name="regularPrice"
@@ -320,7 +293,6 @@ function CreateProduct() {
                 ]}
               >
                 <StyledInputNumber
-
                   className=""
                   placeholder={`Enter your product Regular price`}
                 />
@@ -330,15 +302,14 @@ function CreateProduct() {
                 name="salePrice"
                 className=""
                 label={`Sale price`}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please, enter your product Sale price",
-                  },
-                ]}
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: "Please, enter your product Sale price",
+              //   },
+              // ]}
               >
                 <StyledInputNumber
-
                   className=""
                   placeholder={`Enter your product Sale price`}
                 />
@@ -361,10 +332,15 @@ function CreateProduct() {
                 label={`Sale from`}
               >
                 <StyledDatePicker
-                  disabledDate={disabledDate}
+                  // disabledDate={disabledDate}
                   placeholder={`Sale from`}
                   className=""
                   style={{ fontSize: 20 }}
+                // disabledDate={current =>
+                //   current.isBefore(moment().subtract(1, 'day')) ||
+                //   (dateStart && dateStart.isAfter(moment(current))) ||
+                //   (dateEnd && dateEnd.isBefore(moment(current)))}
+                // onChange={value => setDateStart(value)}
                 />
               </StyledFormItem>
 
@@ -374,10 +350,13 @@ function CreateProduct() {
                 label={`Sale to`}
               >
                 <StyledDatePicker
-                  disabledDate={disabledDate}
+                  // disabledDate={disabledDate}
                   placeholder={`Sale to`}
                   className=""
                   style={{ fontSize: 20 }}
+                // disabledDate={current =>
+                //   (dateStart && dateStart.isAfter(moment(current))) || (dateEnd && dateEnd.isBefore(moment(current)))}
+                // onChange={value => setDateEnd(value)}
                 />
               </StyledFormItem>
             </div>
