@@ -11,7 +11,7 @@ import {
 import { uploadImg } from '../../../../utility/UploadImg';
 import { validateFile } from '../../../../utility';
 
-function UploadImage({ values = [], onChange = () => { } }) {
+function UploadImage({ form, values = [], onChange = () => { } }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
@@ -26,8 +26,15 @@ function UploadImage({ values = [], onChange = () => { } }) {
 
   const handleRemove = (e) => {
     // console.log("e", e);
-    const fileRemoved = values?.filter((item) => item?.uid !== e?.uid);
-    onChange(fileRemoved);
+    const defaultImageId = form.getFieldValue("defaultImageId")
+    if (defaultImageId === e?.uid) {
+      form.setFieldValue("defaultImageId", "")
+      const fileRemoved = values?.filter((item) => item?.uid !== e?.uid);
+      onChange(fileRemoved);
+    } else {
+      const fileRemoved = values?.filter((item) => item?.uid !== e?.uid);
+      onChange(fileRemoved);
+    }
   };
 
   const getBase64Img = (file) => {

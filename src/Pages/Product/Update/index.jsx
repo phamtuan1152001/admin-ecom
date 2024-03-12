@@ -270,6 +270,7 @@ function UpdateProduct() {
               label={`Image`}
             >
               <UploadImage
+                form={form}
                 values={listImages}
                 onChange={(images) => {
                   // console.log("images", images)
