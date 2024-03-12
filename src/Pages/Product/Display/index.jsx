@@ -37,7 +37,8 @@ function DisplayProduct() {
       page: PAGE_SIZE,
       size: PAGE_LIMIT,
       categories: "",
-      productText: ""
+      productText: "",
+      userId: JSON.parse(localStorage.getItem("USER_INFO")).id
     }
     fetchGetListProducts(req)
   }, [])

@@ -89,8 +89,12 @@ function UpdateProduct() {
         regularPrice,
         salePrice,
         onSale,
-        dateOnSaleFrom: moment(dateOnSaleFrom),
-        dateOnSaleTo: moment(dateOnSaleTo),
+        dateOnSaleFrom: moment(dateOnSaleFrom)?.isValid()
+          ? moment(dateOnSaleFrom)
+          : "",
+        dateOnSaleTo: moment(dateOnSaleTo)?.isValid()
+          ? moment(dateOnSaleTo)
+          : "",
         status,
         categories: categories?._id
       })

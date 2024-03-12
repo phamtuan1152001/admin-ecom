@@ -89,7 +89,8 @@ function CreateProduct() {
           : "",
         dateOnSaleTo: moment(values?.dateOnSaleTo).isValid()
           ? moment(values?.dateOnSaleTo?.$d).format()
-          : ""
+          : "",
+        userId: JSON.parse(localStorage.getItem("USER_INFO")).id
       }
       const res = await createProduct(req);
       // console.log("req", req);
