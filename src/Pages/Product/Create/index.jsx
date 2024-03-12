@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import moment from "moment";
+import { useNavigate } from 'react-router-dom';
 
 // @utility
 import { convertToSlug } from "../../../utility";
@@ -10,7 +11,8 @@ import {
   Form,
   Button,
   Image,
-  Radio
+  Radio,
+  notification
 } from "antd";
 import {
   StyledFormItem,
@@ -27,10 +29,14 @@ import UploadImage from "./components/Upload";
 // @constants
 import { SUCCESS } from '../../../constants';
 import { getAllCategories } from "../../../services/service-common";
+import { ROUTES } from "../../../router/constants";
+
+// @service
+import { createProduct } from "../service";
 
 function CreateProduct() {
   const [form] = Form.useForm();
-  // const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
@@ -73,44 +79,41 @@ function CreateProduct() {
   };
 
   const onFinish = async (values) => {
-    console.log("values", values);
-    // const { dob, image, ...rest } = values || {};
-    // try {
-    //   setLoading(true);
-    //   const { data } = idProduct
-    //     ? await updateProduct({
-    //       idProduct,
-    //       dob: moment(dob).format(),
-    //       image: fileList,
-    //       ...rest,
-    //     })
-    //     : await createProduct({
-    //       dob: moment(dob).format(),
-    //       image: fileList,
-    //       ...rest,
-    //     });
-
-    //   if (data?.retCode === RETCODE_SUCCESS) {
-    //     notification.success({
-    //       message: "Successfully",
-    //       description: data?.retText,
-    //       duration: 2,
-    //     });
-    //     setTimeout(() => {
-    //       // navigation.push("/manage-products");
-    //     }, 1000);
-    //   } else {
-    //     notification.error({
-    //       message: "Fail",
-    //       description: "Create fail",
-    //       duration: 2,
-    //     });
-    //   }
-    // } catch (err) {
-    //   console.log("FETCH FAIL!", err);
-    // } finally {
-    //   setLoading(false);
-    // }
+    // console.log("values", values);
+    try {
+      setLoading(true);
+      const req = {
+        ...values,
+        dateOnSaleFrom: moment(values?.dateOnSaleFrom).isValid()
+          ? moment(values?.dateOnSaleFrom).format()
+          : "",
+        dateOnSaleTo: moment(values?.dateOnSaleTo).isValid()
+          ? moment(values?.dateOnSaleTo).format()
+          : ""
+      }
+      const res = await createProduct(req);
+      // console.log("req", res);
+      if (res?.retCode === SUCCESS) {
+        notification.success({
+          message: "Successfully",
+          description: res?.retText,
+          duration: 2,
+        });
+        setTimeout(() => {
+          navigate(ROUTES.DISPLAY_PRODUCT)
+        }, 1000);
+      } else {
+        notification.error({
+          message: "Fail",
+          description: "Create fail",
+          duration: 2,
+        });
+      }
+    } catch (err) {
+      console.log("FETCH FAIL!", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFormChange = () => {
@@ -216,7 +219,7 @@ function CreateProduct() {
               <UploadImage
                 values={listImages}
                 onChange={(images) => {
-                  console.log("images", images)
+                  // console.log("images", images)
                   setListImages(images)
                 }}
               />

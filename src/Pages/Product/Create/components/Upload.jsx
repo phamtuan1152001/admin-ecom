@@ -17,7 +17,7 @@ function UploadImage({ values = [], onChange = () => { } }) {
 
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [fileList, setFileList] = useState(values);
-  console.log("fileList", fileList);
+  // console.log("fileList", fileList);
 
   useEffect(() => {
     onChange(fileList)

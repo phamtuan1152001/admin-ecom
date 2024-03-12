@@ -26,59 +26,44 @@ import { generateLink } from './utility';
 // @components
 import Authentication from './Pages/Authentication';
 
+// @constants
+import { ROUTES_LABEL } from './router/constants';
+
 const ROUTES = [
   {
-    key: "home",
+    key: "dashboard",
     icon: <HomeOutlined />,
-    label: "Home",
+    label: ROUTES_LABEL.HOME_PAGE,
     // children: [],
   },
   {
     key: "product",
     icon: <ProductOutlined />,
-    label: "Products",
+    label: ROUTES_LABEL.PRODUCT_LABEL,
     children: [
       {
         key: "display-product",
         icon: <HomeOutlined />,
-        label: "Display products",
+        label: ROUTES_LABEL.DISPLAY_PRODUCT,
         // children: [],
       },
       {
         key: "create-product",
         icon: <HomeOutlined />,
-        label: "Create product",
+        label: ROUTES_LABEL.CREATE_PRODUCT,
         // children: [],
       },
-      // {
-      //   key: "update-product",
-      //   icon: <HomeOutlined />,
-      //   label: "Update product",
-      //   // children: [],
-      // },
     ],
   },
   {
     key: "order",
     icon: <AuditOutlined />,
-    label: "Orders",
+    label: ROUTES_LABEL.ORDER_LABEL,
     children: [
       {
         key: "display-order",
         icon: <HomeOutlined />,
-        label: "Display order",
-        // children: [],
-      },
-      {
-        key: "create-order",
-        icon: <HomeOutlined />,
-        label: "Create order",
-        // children: [],
-      },
-      {
-        key: "update-order",
-        icon: <HomeOutlined />,
-        label: "Update order",
+        label: ROUTES_LABEL.DISPLAY_ORDER,
         // children: [],
       },
     ],
@@ -86,24 +71,18 @@ const ROUTES = [
   {
     key: "vouchers",
     icon: <SwitcherOutlined />,
-    label: "Vouchers",
+    label: ROUTES_LABEL.VOUCHER_LABEL,
     children: [
       {
         key: "display-voucher",
         icon: <HomeOutlined />,
-        label: "Display voucher",
+        label: ROUTES_LABEL.DISPLAY_VOUCHER,
         // children: [],
       },
       {
         key: "create-voucher",
         icon: <HomeOutlined />,
-        label: "Create voucher",
-        // children: [],
-      },
-      {
-        key: "update-voucher",
-        icon: <HomeOutlined />,
-        label: "Update voucher",
+        label: ROUTES_LABEL.CREATE_VOUCHER,
         // children: [],
       },
     ],

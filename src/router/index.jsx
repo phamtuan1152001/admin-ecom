@@ -1,6 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
+// @constants
+import { ROUTES } from './constants';
+
 // @content
 /* Home */
 import Home from '../Pages/Home';
@@ -14,19 +17,19 @@ import UpdateProduct from '../Pages/Product/Update';
 
 const ROUTE_LIST = [
   {
-    path: "/",
+    path: ROUTES.HOME_PAGE,
     element: <Home />
   },
   {
-    path: "/product/display-product",
+    path: ROUTES.DISPLAY_PRODUCT,
     element: <DisplayProduct />
   },
   {
-    path: "/product/create-product",
+    path: ROUTES.CREATE_PRODUCT,
     element: <CreateProduct />
   },
   {
-    path: "/product/update-product",
+    path: ROUTES.UPDATE_PRODUCT,
     element: <UpdateProduct />
   },
 ]
