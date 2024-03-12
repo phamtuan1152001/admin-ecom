@@ -3,8 +3,12 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 
 // @antd
-import { Table, notification, Carousel, Input } from "antd";
+import { Table, notification, Carousel, Input, Button } from "antd";
 const { Search } = Input;
+import SearchProductByText from './components/SearchProductByText';
+import SearchProductByCategory from './components/SearchProductByCategory';
+import SearchProductByStatus from './components/SearchProductByStatus';
+import { StyledButton } from '../../../styles/overrides';
 
 // @utility
 import { formatToCurrencyVND } from '../../../utility';
@@ -28,20 +32,25 @@ import { ROUTES } from '../../../router/constants';
 function DisplayProduct() {
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(false)
+
   const [page, setPage] = useState({});
   const [listProducts, setListProducts] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [productText, setProductText] = useState("")
+  const [categoryId, setCategoryId] = useState("")
+  const [status, setStatus] = useState("")
 
   useEffect(() => {
     const req = {
       page: PAGE_SIZE,
       size: PAGE_LIMIT,
-      categories: "",
-      productText: "",
+      categories: categoryId,
+      productText: productText,
+      status: status,
       userId: JSON.parse(localStorage.getItem("USER_INFO")).id
     }
     fetchGetListProducts(req)
-  }, [])
+  }, [productText, categoryId, status])
 
   const fetchGetListProducts = async (payload) => {
     try {
@@ -171,30 +180,55 @@ function DisplayProduct() {
 
   return (
     <React.Fragment>
-      {listProducts?.length > 0 && (
-        <Table
-          rowKey={(record) => record?.key}
-          columns={columnsTable}
-          dataSource={listProducts}
-          loading={loading}
-          pagination={{
-            hideOnSinglePage: true,
-            pageSize: PAGE_LIMIT,
-            current: page?.currentPage + 1,
-            total: page?.totalItems,
-            onChange: (pageitem) => {
-              // console.log("pageitem", pageitem);
-              const payload = {
-                page: pageitem,
-                size: PAGE_LIMIT,
-                categories: "",
-                productText: ""
-              };
-              fetchGetListProducts(payload);
-            },
-          }}
-        />
-      )}
+      <div className='flex flex-row justify-between items-center mb-4'>
+        <StyledButton
+          className={"bg-[#333333] text-white text-base h-[35px] px-4"}
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </StyledButton>
+        <div className='flex flex-row justify-between items-center gap-x-4'>
+          <SearchProductByText
+            onChange={(value) => {
+              setProductText(value)
+            }}
+          />
+          <SearchProductByCategory
+            onChange={(value) => {
+              setCategoryId(value)
+            }}
+          />
+          <SearchProductByStatus
+            onChange={(value) => {
+              setStatus(value);
+            }}
+          />
+        </div>
+      </div>
+      <Table
+        rowKey={(record) => record?.key}
+        columns={columnsTable}
+        dataSource={listProducts}
+        loading={loading}
+        pagination={{
+          hideOnSinglePage: true,
+          pageSize: PAGE_LIMIT,
+          current: !!page?.currentPage
+            ? page?.currentPage + 1
+            : 1,
+          total: page?.totalItems,
+          onChange: (pageitem) => {
+            // console.log("pageitem", pageitem);
+            const payload = {
+              page: pageitem,
+              size: PAGE_LIMIT,
+              categories: "",
+              productText: ""
+            };
+            fetchGetListProducts(payload);
+          },
+        }}
+      />
     </React.Fragment>
   )
 }

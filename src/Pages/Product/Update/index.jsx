@@ -474,14 +474,14 @@ function UpdateProduct() {
         </StyledFormItem>
 
         <div className="flex flex-row justify-end items-center">
-          <Button
+          <StyledButton
             className={"bg-[#333333] text-white text-base h-[40px]"}
             disabled={isDisable}
             loading={loading}
             htmlType="submit"
           >
             Submit
-          </Button>
+          </StyledButton>
         </div>
       </Form>
     </Spin>

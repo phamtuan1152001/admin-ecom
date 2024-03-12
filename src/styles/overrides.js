@@ -23,44 +23,46 @@ import {
 import { SIDER_WIDTH, SIDER_COLLAPSED_WIDTH } from '../constants/styles';
 
 export const StyledSelect = styled(Select)`
+  height: 35px;
+  
   .ant-select-arrow {
-    margin-top: 4px;
+    margin-top: -4px;
   }
 
   &.ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border-radius: 8px;
-    height: 50px;
-    font-size: 16px;
+    height: 35px;
+    font-size: 14px;
   }
 `
 
 export const StyledInputNumber = styled(InputNumber)` 
   width: 100%;
-  height: 50px;
+  height: 35px;
   border-radius: 8px;
   
   .ant-input-number-input-wrap > input {
-    height: 50px;
-    font-size: 16px;
+    height: 35px;
+    font-size: 14px;
     line-height: 22px;
     font-weight: 500;
   }
 `
 
 export const StyledCheckbox = styled(Checkbox)`
-  font-size: 16px;
+  font-size: 14px;
   line-height: 22px;
   font-weight: 500;
 `
 
 export const StyledDatePicker = styled(DatePicker)`
   width: 100%;
-  height: 50px;
+  height: 35px;
   border-radius: 8px;
 
   .ant-picker-input > input {
     // background: red;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 22px;
     font-weight: 500;
   }
@@ -78,7 +80,7 @@ export const StyledForm = styled(Form)``;
 export const StyledFormItem = styled(Form.Item)`
   .ant-form-item-label > label {
     height: auto !important;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 22px;
     font-weight: 700;
   }
@@ -86,16 +88,16 @@ export const StyledFormItem = styled(Form.Item)`
 
 export const StyledInput = styled(Input)`
   border-radius: 8px;
-  height: 50px;
-  font-size: 16px;
+  height: 35px;
+  font-size: 14px;
   line-height: 22px;
   font-weight: 500
 `;
 
 export const StyledInputPassword = styled(Input.Password)`
   border-radius: 8px;
-  height: 50px;
-  font-size: 16px;
+  height: 35px;
+  font-size: 14px;
   line-height: 22px;
 `;
 
@@ -104,14 +106,15 @@ export const StyledButton = styled(Button)`
   font-weight: 500;
   border-radius: 4px;
   font-size: 13px;
-
-  /* &.ant-btn-primary {
-    background: var(--primary);
-    border-color: var(--primary);
-  } */
+  // background: #001529 !important;
 
   &.ant-btn-primary[disabled] {
     color: #333;
+  }
+
+  &:hover {
+    border: solid 1px #001529 !important;
+    color: #000000 !important;
   }
 
   ${props => {
