@@ -16,12 +16,6 @@ function UploadImage({ values = [], onChange = () => { } }) {
   const [previewImage, setPreviewImage] = useState("");
 
   const [loadingUpload, setLoadingUpload] = useState(false);
-  const [fileList, setFileList] = useState(values);
-  // console.log("fileList", fileList);
-
-  useEffect(() => {
-    onChange(fileList)
-  }, [fileList])
 
   const handleChange = async (props) => {
     const { file, fileList } = props || {};
@@ -32,8 +26,8 @@ function UploadImage({ values = [], onChange = () => { } }) {
 
   const handleRemove = (e) => {
     // console.log("e", e);
-    const fileRemoved = fileList?.filter((item) => item?.uid !== e?.uid);
-    setFileList(fileRemoved);
+    const fileRemoved = values?.filter((item) => item?.uid !== e?.uid);
+    onChange(fileRemoved);
   };
 
   const getBase64Img = (file) => {
@@ -55,7 +49,8 @@ function UploadImage({ values = [], onChange = () => { } }) {
             uid: res?.data?.version_id,
             url: res?.data?.secure_url,
           };
-          setFileList((prev) => [...prev, listImg]);
+          const list = [...values, listImg]
+          onChange(list)
         }
       } catch (err) {
         console.log("FETCH FAIL!", err);
@@ -76,7 +71,7 @@ function UploadImage({ values = [], onChange = () => { } }) {
     <React.Fragment>
       <Upload
         listType="picture-card"
-        fileList={fileList}
+        fileList={values}
         customRequest={(options) => {
           const { file } = options || {};
           options.onSuccess(file, options.file);
@@ -86,7 +81,7 @@ function UploadImage({ values = [], onChange = () => { } }) {
         onChange={handleChange}
         onRemove={(e) => handleRemove(e)}
       >
-        {fileList.length >= 8 ? null : <UploadButton loading={loadingUpload} />}
+        {values.length >= 8 ? null : <UploadButton loading={loadingUpload} />}
       </Upload>
       <Modal
         open={previewOpen}

@@ -28,11 +28,11 @@ import UploadImage from "./components/Upload";
 
 // @constants
 import { SUCCESS } from '../../../constants';
-import { getAllCategories } from "../../../services/service-common";
 import { ROUTES } from "../../../router/constants";
 
 // @service
 import { createProduct } from "../service";
+import { getAllCategories } from "../../../services/service-common";
 
 function CreateProduct() {
   const [form] = Form.useForm();
@@ -85,14 +85,14 @@ function CreateProduct() {
       const req = {
         ...values,
         dateOnSaleFrom: moment(values?.dateOnSaleFrom).isValid()
-          ? moment(values?.dateOnSaleFrom).format()
+          ? moment(values?.dateOnSaleFrom?.$d).format()
           : "",
         dateOnSaleTo: moment(values?.dateOnSaleTo).isValid()
-          ? moment(values?.dateOnSaleTo).format()
+          ? moment(values?.dateOnSaleTo?.$d).format()
           : ""
       }
       const res = await createProduct(req);
-      // console.log("req", res);
+      // console.log("req", req);
       if (res?.retCode === SUCCESS) {
         notification.success({
           message: "Successfully",

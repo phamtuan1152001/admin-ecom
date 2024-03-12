@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import classNames from 'classnames';
+import { useNavigate } from 'react-router-dom';
 
 // @antd
 import { Table, notification, Carousel, Input } from "antd";
@@ -22,8 +23,11 @@ import {
   SUCCESS,
   LIMIT_DEFAULT
 } from '../../../constants';
+import { ROUTES } from '../../../router/constants';
 
 function DisplayProduct() {
+  const navigate = useNavigate()
+
   const [page, setPage] = useState({});
   const [listProducts, setListProducts] = useState([])
   const [loading, setLoading] = useState(false)
@@ -87,6 +91,15 @@ function DisplayProduct() {
     }
   }
 
+  const goToEditProduct = (data) => {
+    // console.log("data", data);
+    navigate(ROUTES.UPDATE_PRODUCT, {
+      state: {
+        productInfo: data
+      }
+    })
+  }
+
   const columnsTable = [
     {
       title: "No",
@@ -139,7 +152,7 @@ function DisplayProduct() {
           <div className="flex flex-row justify-around items-center">
             <div
               className="edit-icon d-flex flex-column justify-content-center align-items-center cursor-pointer"
-            // onClick={() => goToEditProduct(record)}
+              onClick={() => goToEditProduct(record)}
             >
               <EditIcon width={15} height={15} />
             </div>

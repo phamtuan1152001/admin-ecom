@@ -7,7 +7,11 @@ import { convertFileToBase64 } from "../../utility";
 // @service 
 import { uploadImg } from "../../utility/UploadImg";
 
-const Ckeditor = ({ placeholder, description = "", onChange = () => { } }) => {
+const Ckeditor = ({
+  placeholder,
+  description = "",
+  onChange = () => { }
+}) => {
   const [value, setValue] = useState("");
 
   useEffect(() => {
