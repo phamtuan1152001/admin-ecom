@@ -18,6 +18,9 @@ import {
 import { Layout, Menu, Button, theme } from 'antd';
 import { StyledSider } from './styles/overrides';
 const { Header, Content } = Layout;
+import {
+  LogoutOutlined
+} from '@ant-design/icons';
 
 // @routes
 import RoutesComponents from './router';
@@ -117,6 +120,11 @@ const App = () => {
     return <Authentication />
   }
 
+  const handleLogOut = () => {
+    localStorage.removeItem("USER_INFO")
+    window.location.href = "/"
+  }
+
   return (
     <Layout className='h-screen'>
       <StyledSider
@@ -128,7 +136,9 @@ const App = () => {
           <div className='flex flex-col justify-center items-center'>
             <UserOutlined style={{ fontSize: 30, color: "#FFFFFF" }} />
           </div>
-          <h1 className='text-base font-bold text-center text-white'>PHAM LE SONG TUAN</h1>
+          <h1 className='text-base font-bold text-center text-white'>
+            {JSON.parse(localStorage.getItem("USER_INFO")).fullName}
+          </h1>
         </div>
         <div className="demo-logo-vertical" />
         <Menu
@@ -151,16 +161,22 @@ const App = () => {
             background: colorBgContainer,
           }}
         >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
+          <div className='flex flex-row justify-between items-center mx-4'>
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: '16px',
+                width: 64,
+                height: 64,
+              }}
+            />
+            <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
+              <div className='flex flex-col justify-center items-center'><LogoutOutlined /></div>
+              <h3>Logout</h3>
+            </div>
+          </div>
         </Header>
         <Content
           style={{
