@@ -4,6 +4,7 @@ export const ROUTES = {
   CREATE_PRODUCT: "/product/create-product",
   UPDATE_PRODUCT: "/product/update-product",
   DISPLAY_ORDER: "/order/display-order",
+  DETAIL_ORDER: "/order/detail-order",
   UPDATE_ORDER: "/order/update-order",
   DISPLAY_VOUCHER: "/voucher/display-voucher",
   CREATE_VOUCHER: "/voucher/create-voucher",

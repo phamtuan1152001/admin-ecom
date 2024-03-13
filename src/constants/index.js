@@ -7,3 +7,9 @@ export const FAIL = 1
 
 export const STATUS_DRAFT = "draft";
 export const STATUS_PUBLISH = "publish"
+
+export const PAYMENT_METHOD_TYPE = {
+  COD: "COD",
+  ATM_BANKING: "atm-banking",
+  APP_BANKING: "other"
+}

@@ -3,8 +3,7 @@ import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 
 // @antd
-import { Table, notification, Carousel, Input, Button } from "antd";
-const { Search } = Input;
+import { Table, notification, Input } from "antd";
 import SearchProductByText from './components/SearchProductByText';
 import SearchProductByCategory from './components/SearchProductByCategory';
 import SearchProductByStatus from './components/SearchProductByStatus';

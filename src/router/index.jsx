@@ -15,6 +15,10 @@ import CreateProduct from '../Pages/Product/Create';
 import UpdateProduct from '../Pages/Product/Update';
 /* End */
 
+/* Order */
+import DisplayOrder from '../Pages/Order/Display';
+/* End */
+
 const ROUTE_LIST = [
   {
     path: ROUTES.HOME_PAGE,
@@ -31,6 +35,10 @@ const ROUTE_LIST = [
   {
     path: ROUTES.UPDATE_PRODUCT,
     element: <UpdateProduct />
+  },
+  {
+    path: ROUTES.DISPLAY_ORDER,
+    element: <DisplayOrder />
   },
 ]
 
