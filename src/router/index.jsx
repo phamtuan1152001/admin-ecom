@@ -17,6 +17,7 @@ import UpdateProduct from '../Pages/Product/Update';
 
 /* Order */
 import DisplayOrder from '../Pages/Order/Display';
+import DetailOrder from '../Pages/Order/Detail';
 /* End */
 
 const ROUTE_LIST = [
@@ -39,6 +40,10 @@ const ROUTE_LIST = [
   {
     path: ROUTES.DISPLAY_ORDER,
     element: <DisplayOrder />
+  },
+  {
+    path: ROUTES.DETAIL_ORDER,
+    element: <DetailOrder />
   },
 ]
 

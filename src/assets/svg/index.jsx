@@ -1,3 +1,45 @@
+export const PaymentFailIcon = (props) => {
+  return (
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="32" cy="32" r="28" fill="#FF0000" />
+      <path d="M21.6066 42.1127L32.2132 31.5061M42.8198 20.8995L32.2132 31.5061M32.2132 31.5061L21.6066 20.8995M32.2132 31.5061L42.8198 42.1127" stroke="#D9D9D9" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export const PaymentSuccessStatus = (props) => {
+  return (
+    <svg width="56" height="57" viewBox="0 0 56 57" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="28" cy="28.8008" r="28" fill="#23A26D" fillOpacity="0.12" />
+      <path d="M27.4993 15.4688C20.1527 15.4688 14.166 21.4554 14.166 28.8021C14.166 36.1487 20.1527 42.1354 27.4993 42.1354C34.846 42.1354 40.8327 36.1487 40.8327 28.8021C40.8327 21.4554 34.846 15.4688 27.4993 15.4688ZM33.8727 25.7354L26.3127 33.2954C26.126 33.4821 25.8727 33.5887 25.606 33.5887C25.3393 33.5887 25.086 33.4821 24.8993 33.2954L21.126 29.5221C20.7393 29.1354 20.7393 28.4954 21.126 28.1087C21.5127 27.7221 22.1527 27.7221 22.5393 28.1087L25.606 31.1754L32.4593 24.3221C32.846 23.9354 33.486 23.9354 33.8727 24.3221C34.2593 24.7087 34.2593 25.3354 33.8727 25.7354Z" fill="#23A26D" />
+    </svg>
+  )
+}
+
+export function CartIcon(props) {
+  return (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='none'
+      viewBox='0 0 24 25'
+      {...props}
+    >
+      <path
+        stroke='currentColor'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M19.579 7.25H4.42a.75.75 0 00-.745.667l-1.334 12a.75.75 0 00.746.833h17.824a.75.75 0 00.745-.833l-1.333-12a.75.75 0 00-.745-.667z'
+      ></path>
+      <path
+        stroke='currentColor'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M8.25 10.25v-3a3.75 3.75 0 017.5 0v3'
+      ></path>
+    </svg>
+  );
+}
+
 export const DeleteIcon = (props) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" {...props}>

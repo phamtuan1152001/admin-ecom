@@ -88,22 +88,22 @@ function DisplayOrder() {
   }
 
   const gotoDetailOrder = (data) => {
-    console.log("data", data);
-    // navigate(ROUTES.DETAIL_ORDER, {
-    //   state: {
-    //     orderInfo: data
-    //   }
-    // })
+    // console.log("data", data);
+    navigate(ROUTES.DETAIL_ORDER, {
+      state: {
+        orderInfo: data
+      }
+    })
   }
 
   const renderStatusOrder = (type) => {
     switch (type) {
       case 0:
-        return <span className='text-base font-normal tracking-widest text-yellow-500'>Pending</span>
+        return <span className='text-base font-bold tracking-widest text-yellow-500'>Pending</span>
       case 1:
-        return <span className='text-base font-normal tracking-widest text-green-500'>Successfully</span>
+        return <span className='text-base font-bold tracking-widest text-green-500'>Successfully</span>
       default:
-        return <span className='text-base font-normal tracking-widest text-red-500'>Cancel</span>
+        return <span className='text-base font-bold tracking-widest text-red-500'>Cancel</span>
     }
   }
 
@@ -164,7 +164,7 @@ function DisplayOrder() {
       key: "totalPrice",
       render: (_, record) => {
         return (
-          <span className='text-base font-normal tracking-widest'>
+          <span className='text-base font-bold tracking-widest'>
             {formatToCurrencyVND(record?.cartDetail?.totalPrice)}
           </span>
         )

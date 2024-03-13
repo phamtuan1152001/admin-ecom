@@ -14,11 +14,20 @@ export const getListOrdersAdmin = async (payload) => {
 }
 
 export const getDetailOrderAdmin = async (payload) => {
-  const { data } = await apiMethod.get(GET_DETAIL_ORDER_ADMIN + `/${payload}`)
+  const { data } = await apiMethod.post(GET_DETAIL_ORDER_ADMIN + `/${payload?.orderId}`, {
+    userId: payload?.userId
+  })
   return data
 }
 
 export const deleteDetailOrderAdmin = async (payload) => {
   const { data } = await apiMethod.delete(DELETE_DETAIL_ORDER_ADMIN + `/${payload}`)
+  return data
+}
+
+export const updateStatusOrderAdmin = async (payload) => {
+  const { data } = await apiMethod.put(UPDATE_DETAIL_ORDER_ADMIN + `/${payload?._id}`, {
+    ...payload
+  })
   return data
 }
