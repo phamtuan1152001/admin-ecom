@@ -1,5 +1,6 @@
 export const ROUTES = {
-  HOME_PAGE: "/",
+  // HOME_PAGE: "/",
+  DASHBOARD_PAGE: "/",
   DISPLAY_PRODUCT: "/product/display-product",
   CREATE_PRODUCT: "/product/create-product",
   UPDATE_PRODUCT: "/product/update-product",

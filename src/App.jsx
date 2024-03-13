@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import apiMethod from './utility/apiMethod';
 
 // @icon
@@ -34,7 +34,7 @@ import { ROUTES_LABEL } from './router/constants';
 
 const ROUTES = [
   {
-    key: "dashboard",
+    key: "",
     icon: <HomeOutlined />,
     label: ROUTES_LABEL.HOME_PAGE,
     // children: [],
@@ -75,20 +75,20 @@ const ROUTES = [
     key: "vouchers",
     icon: <SwitcherOutlined />,
     label: ROUTES_LABEL.VOUCHER_LABEL,
-    children: [
-      {
-        key: "display-voucher",
-        icon: <HomeOutlined />,
-        label: ROUTES_LABEL.DISPLAY_VOUCHER,
-        // children: [],
-      },
-      {
-        key: "create-voucher",
-        icon: <HomeOutlined />,
-        label: ROUTES_LABEL.CREATE_VOUCHER,
-        // children: [],
-      },
-    ],
+    // children: [
+    //   {
+    //     key: "display-voucher",
+    //     icon: <HomeOutlined />,
+    //     label: ROUTES_LABEL.DISPLAY_VOUCHER,
+    //     // children: [],
+    //   },
+    //   {
+    //     key: "create-voucher",
+    //     icon: <HomeOutlined />,
+    //     label: ROUTES_LABEL.CREATE_VOUCHER,
+    //     // children: [],
+    //   },
+    // ],
   },
   {
     key: "others",
@@ -100,8 +100,11 @@ const ROUTES = [
 
 const App = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const activeRoute = location.pathname.substring(1).split("/")
 
   const [collapsed, setCollapsed] = useState(false);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -124,7 +127,7 @@ const App = () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
   }
-
+  console.log("activeRoute", activeRoute);
   return (
     <Layout className='h-screen'>
       <StyledSider
@@ -144,7 +147,8 @@ const App = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
+          defaultSelectedKeys={activeRoute}
+          defaultOpenKeys={activeRoute}
           onClick={(e) => {
             // console.log("e", e)
             const { key, keyPath } = e || {}

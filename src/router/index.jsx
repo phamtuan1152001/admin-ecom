@@ -5,6 +5,10 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ROUTES } from './constants';
 
 // @content
+/* Dashboard */
+import DashboardPage from '../Pages/Dashboard';
+/* End */
+
 /* Home */
 import Home from '../Pages/Home';
 /* End */
@@ -22,8 +26,8 @@ import DetailOrder from '../Pages/Order/Detail';
 
 const ROUTE_LIST = [
   {
-    path: ROUTES.HOME_PAGE,
-    element: <Home />
+    path: ROUTES.DASHBOARD_PAGE,
+    element: <DashboardPage />
   },
   {
     path: ROUTES.DISPLAY_PRODUCT,
