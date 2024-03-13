@@ -127,7 +127,8 @@ const App = () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
   }
-  console.log("activeRoute", activeRoute);
+  // console.log("activeRoute", activeRoute);
+
   return (
     <Layout className='h-screen'>
       <StyledSider

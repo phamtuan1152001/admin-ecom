@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 // @antd
 import { Table, notification, Input } from "antd";
 import { StyledButton } from '../../../styles/overrides';
 import SearchOrderByText from './components/SearchOrderByText';
+import SearchOrderByDate from './components/SearchOrderByDate';
 
 // @utility
 import { formatToCurrencyVND } from '../../../utility';
@@ -31,16 +33,22 @@ function DisplayOrder() {
   const [page, setPage] = useState({});
   const [listOrders, setListOrders] = useState([])
   const [orderText, setOrderText] = useState("")
+  const [dateFilter, setDateFilter] = useState({
+    dateStart: "",
+    dateEnd: ""
+  })
 
   useEffect(() => {
     const req = {
       page: PAGE_SIZE,
       size: PAGE_LIMIT,
       orderText: orderText,
-      userId: JSON.parse(localStorage.getItem("USER_INFO")).id
+      userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
+      dateStart: dateFilter.dateStart,
+      dateEnd: dateFilter.dateEnd
     }
     fetchGetListOrders(req)
-  }, [orderText])
+  }, [orderText, dateFilter])
 
   const fetchGetListOrders = async (payload) => {
     try {
@@ -218,7 +226,7 @@ function DisplayOrder() {
 
   return (
     <React.Fragment>
-      <div className='flex flex-row justify-between items-center mb-4'>
+      <div className='flex flex-row justify-between items-center mb-4 w-full'>
         <StyledButton
           className={"bg-[#333333] text-white text-base h-[35px] px-4"}
           onClick={() => navigate(-1)}
@@ -230,6 +238,25 @@ function DisplayOrder() {
             onChange={(value) => {
               // console.log("value", value);
               setOrderText(value)
+            }}
+          />
+          <SearchOrderByDate
+            onChange={(v) => {
+              if (!!v) {
+                const start = moment(v[0]?.$d).format()
+                const end = moment(v[1]?.$d).format()
+                // console.log("value", { start, end })
+                setDateFilter({
+                  dateStart: start,
+                  dateEnd: end
+                })
+              } else {
+                setDateFilter({
+                  dateStart: "",
+                  dateEnd: ""
+                })
+              }
+              // console.log("v", v);
             }}
           />
         </div>

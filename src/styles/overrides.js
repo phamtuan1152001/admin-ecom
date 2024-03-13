@@ -22,6 +22,19 @@ import {
 } from 'antd';
 import { SIDER_WIDTH, SIDER_COLLAPSED_WIDTH } from '../constants/styles';
 
+export const StyledRangeDatePicker = styled(DatePicker.RangePicker)`
+  width: 100%;
+  height: 35px;
+  border-radius: 8px;
+
+  .ant-picker-input > input {
+    // background: red;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 500;
+  }
+`
+
 export const StyledSelect = styled(Select)`
   height: 35px;
   
@@ -91,7 +104,8 @@ export const StyledInput = styled(Input)`
   height: 35px;
   font-size: 14px;
   line-height: 22px;
-  font-weight: 500
+  font-weight: 500;
+  width: 200px;
 `;
 
 export const StyledInputPassword = styled(Input.Password)`
