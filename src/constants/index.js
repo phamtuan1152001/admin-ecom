@@ -11,5 +11,7 @@ export const STATUS_PUBLISH = "publish"
 export const PAYMENT_METHOD_TYPE = {
   COD: "COD",
   ATM_BANKING: "atm-banking",
+  MOMO_BANKING: "momo-banking",
+  METAMASK: "metamask",
   APP_BANKING: "other"
 }

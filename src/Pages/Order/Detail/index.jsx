@@ -121,6 +121,21 @@ function DetailOrder() {
     }
   }
 
+  const renderPaymentMethod = (type) => {
+    switch (type) {
+      case PAYMENT_METHOD_TYPE.COD:
+        return <span className='text-base font-normal tracking-widest'>COD</span>
+      case PAYMENT_METHOD_TYPE.ATM_BANKING:
+        return <span className='text-base font-normal tracking-widest'>Banking transfer</span>
+      case PAYMENT_METHOD_TYPE.MOMO_BANKING:
+        return <span className='text-base font-normal tracking-widest'>MOMO transfer</span>
+      case PAYMENT_METHOD_TYPE.METAMASK:
+        return <span className='text-base font-normal tracking-widest'>Metamask payment</span>
+      default:
+        return <span className='text-base font-normal tracking-widest'>--</span>
+    }
+  }
+
   return (
     <Spin spinning={loading}>
       <div className='flex flex-row justify-between items-center mb-4'>
@@ -168,9 +183,7 @@ function DetailOrder() {
             <div className="flex flex-row justify-between items-center">
               <h3 className="text-base font-normal text-[#637381]">Payment methods</h3>
               <h3 className="text-base font-bold text-[#000000] max-[768px]:text-right">
-                {detailOrder?.paymentMethod
-                  ? detailOrder?.paymentMethod === PAYMENT_METHOD_TYPE.COD ? "COD (Cash on delivery)" : "Bank transfer"
-                  : "--"}
+                {renderPaymentMethod(detailOrder?.paymentMethod)}
               </h3>
             </div>
             <div className="flex flex-row justify-between items-center">
@@ -223,27 +236,31 @@ function DetailOrder() {
             <div className="flex flex-row justify-between items-center">
               <h3 className="text-base font-normal text-[#637381]">Payment methods:</h3>
               <h3 className="text-base font-bold text-[#000000] max-[768px]:text-right">
-                {detailOrder?.paymentMethod
-                  ? detailOrder?.paymentMethod === PAYMENT_METHOD_TYPE.COD ? "COD (Cash on delivery)" : "Bank transfer"
-                  : "--"}
+                {renderPaymentMethod(detailOrder?.paymentMethod)}
               </h3>
             </div>
           </div>
         </div>
       </div>
       <div className='flex flex-row justify-end items-center gap-x-4'>
-        <StyledButton
-          className={"bg-[#333333] text-white text-base h-[35px] px-4"}
-          onClick={() => fetchUpdateStatusOrder(1)}
-        >
-          Update Status Successfully
-        </StyledButton>
-        <StyledButton
-          className={"bg-[#333333] text-white text-base h-[35px] px-4"}
-          onClick={() => fetchUpdateStatusOrder(2)}
-        >
-          Update Status Cancel
-        </StyledButton>
+        {detailOrder?.statusOrder === 1 || detailOrder?.statusOrder === 2
+          ? undefined
+          : (
+            <>
+              <StyledButton
+                className={"bg-[#333333] text-white text-base h-[35px] px-4"}
+                onClick={() => fetchUpdateStatusOrder(1)}
+              >
+                Update Status Successfully
+              </StyledButton>
+              <StyledButton
+                className={"bg-[#333333] text-white text-base h-[35px] px-4"}
+                onClick={() => fetchUpdateStatusOrder(2)}
+              >
+                Update Status Cancel
+              </StyledButton>
+            </>
+          )}
       </div>
     </Spin>
   )

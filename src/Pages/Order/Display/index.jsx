@@ -120,9 +120,13 @@ function DisplayOrder() {
       case PAYMENT_METHOD_TYPE.COD:
         return <span className='text-base font-normal tracking-widest'>COD</span>
       case PAYMENT_METHOD_TYPE.ATM_BANKING:
-        return <span className='text-base font-normal tracking-widest'>Transfer banking</span>
+        return <span className='text-base font-normal tracking-widest'>Banking transfer</span>
+      case PAYMENT_METHOD_TYPE.MOMO_BANKING:
+        return <span className='text-base font-normal tracking-widest'>MOMO transfer</span>
+      case PAYMENT_METHOD_TYPE.METAMASK:
+        return <span className='text-base font-normal tracking-widest'>Metamask payment</span>
       default:
-        return <span className='text-base font-normal tracking-widest'>App banking</span>
+        return <span className='text-base font-normal tracking-widest'>--</span>
     }
   }
 
