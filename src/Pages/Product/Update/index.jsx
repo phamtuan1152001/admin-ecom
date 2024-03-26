@@ -356,6 +356,7 @@ function UpdateProduct() {
                 <StyledInputNumber
                   className=""
                   placeholder={`Enter your product Regular price`}
+                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
 
@@ -373,6 +374,7 @@ function UpdateProduct() {
                 <StyledInputNumber
                   className=""
                   placeholder={`Enter your product Sale price`}
+                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
             </div>

@@ -80,7 +80,7 @@ function CreateProduct() {
   };
 
   const onFinish = async (values) => {
-    // console.log("values", req);
+    // console.log("values", values);
     try {
       setLoading(true);
       const req = {
@@ -308,6 +308,7 @@ function CreateProduct() {
                 <StyledInputNumber
                   className=""
                   placeholder={`Enter your product Regular price`}
+                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
 
@@ -325,6 +326,7 @@ function CreateProduct() {
                 <StyledInputNumber
                   className=""
                   placeholder={`Enter your product Sale price`}
+                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
             </div>
