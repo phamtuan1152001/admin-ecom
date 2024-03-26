@@ -4,7 +4,7 @@ import moment from "moment";
 import { useNavigate } from 'react-router-dom';
 
 // @utility
-import { convertToSlug } from "../../../utility";
+import { convertToSlug, generatingRandomCode } from "../../../utility";
 
 // @components
 import {
@@ -49,6 +49,7 @@ function CreateProduct() {
 
   useEffect(() => {
     fetchGetAllCategories()
+    onInitCodeProduct()
   }, [])
 
   const fetchGetAllCategories = async () => {
@@ -79,7 +80,7 @@ function CreateProduct() {
   };
 
   const onFinish = async (values) => {
-    // console.log("values", values);
+    // console.log("values", req);
     try {
       setLoading(true);
       const req = {
@@ -90,7 +91,8 @@ function CreateProduct() {
         dateOnSaleTo: moment(values?.dateOnSaleTo).isValid()
           ? moment(values?.dateOnSaleTo?.$d).format()
           : "",
-        userId: JSON.parse(localStorage.getItem("USER_INFO")).id
+        userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
+        code: "ECOM" + values?.code,
       }
       const res = await createProduct(req);
       // console.log("req", req);
@@ -126,7 +128,7 @@ function CreateProduct() {
       !hasValues?.code ||
       !hasValues?.name ||
       !hasValues?.slug ||
-      !hasValues?.description ||
+      // !hasValues?.description ||
       !hasValues?.regularPrice ||
       !hasValues?.categories ||
       !hasValues?.status ||
@@ -135,6 +137,10 @@ function CreateProduct() {
       // !hasValues?.salePrice ||
     );
   };
+
+  const onInitCodeProduct = () => {
+    form.setFieldValue("code", generatingRandomCode())
+  }
 
   return (
     <React.Fragment>
@@ -177,7 +183,9 @@ function CreateProduct() {
               ]}
             >
               <StyledInput
+                addonBefore="ECOM"
                 className=""
+                disabled
                 placeholder={`Enter your product code`}
               />
             </StyledFormItem>
@@ -404,12 +412,12 @@ function CreateProduct() {
           name="description"
           className="col-span-1"
           label={`Description`}
-          rules={[
-            {
-              required: true,
-              message: "Please, enter your description",
-            },
-          ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: "Please, enter your description",
+        //   },
+        // ]}
         >
           <Ckeditor placeholder={"Enter news content"} />
         </StyledFormItem>

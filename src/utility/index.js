@@ -1,6 +1,17 @@
 import slugify from 'slugify';
 import { message } from "antd";
 
+export const generatingRandomCode = () => {
+  var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  var randomString = '';
+
+  for (var i = 0; i < 22; i++) {
+    var randomIndex = Math.floor(Math.random() * chars.length);
+    randomString += chars[randomIndex];
+  }
+
+  return randomString;
+}
 
 export const convertToSlug = (value) => {
   const slug = slugify(value, {
