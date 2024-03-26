@@ -91,7 +91,9 @@ function DisplayProduct() {
           page: PAGE_SIZE,
           size: PAGE_LIMIT,
           categories: "",
-          productText: ""
+          productText: "",
+          status: status,
+          userId: JSON.parse(localStorage.getItem("USER_INFO")).id
         }
         fetchGetListProducts(reqGetListProducts)
       }
@@ -221,8 +223,10 @@ function DisplayProduct() {
             const payload = {
               page: pageitem,
               size: PAGE_LIMIT,
-              categories: "",
-              productText: ""
+              categories: categoryId,
+              productText: productText,
+              status: status,
+              userId: JSON.parse(localStorage.getItem("USER_INFO")).id
             };
             fetchGetListProducts(payload);
           },
