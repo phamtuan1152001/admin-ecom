@@ -1,6 +1,9 @@
 export const ROUTES = {
   // HOME_PAGE: "/",
   DASHBOARD_PAGE: "/",
+  DISPLAY_CATEGORY: "/category/display-category",
+  CREATE_CATEGORY: "/category/create-category",
+  UPDATE_CATEGORY: "/category/update-category",
   DISPLAY_PRODUCT: "/product/display-product",
   CREATE_PRODUCT: "/product/create-product",
   UPDATE_PRODUCT: "/product/update-product",
@@ -14,6 +17,9 @@ export const ROUTES = {
 
 export const ROUTES_LABEL = {
   HOME_PAGE: "Dashboard",
+  CATEGORY_LABEL: "Category",
+  DISPLAY_CATEGORY: "List of categories",
+  CREATE_CATEGORY: "Create category",
   PRODUCT_LABEL: "Product",
   DISPLAY_PRODUCT: "List of products",
   CREATE_PRODUCT: "Create product",

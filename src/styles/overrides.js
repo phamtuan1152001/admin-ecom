@@ -105,7 +105,7 @@ export const StyledInput = styled(Input)`
   font-size: 14px;
   line-height: 22px;
   font-weight: 500;
-  width: 200px;
+  width: 100%;
 `;
 
 export const StyledInputPassword = styled(Input.Password)`

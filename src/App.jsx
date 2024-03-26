@@ -11,7 +11,8 @@ import {
   AuditOutlined,
   SwitcherOutlined,
   DatabaseOutlined,
-  UserOutlined
+  UserOutlined,
+  MonitorOutlined
 } from '@ant-design/icons';
 
 // @antd
@@ -38,6 +39,25 @@ const ROUTES = [
     icon: <HomeOutlined />,
     label: ROUTES_LABEL.HOME_PAGE,
     // children: [],
+  },
+  {
+    key: "category",
+    icon: <MonitorOutlined />,
+    label: ROUTES_LABEL.CATEGORY_LABEL,
+    children: [
+      {
+        key: "display-category",
+        icon: <HomeOutlined />,
+        label: ROUTES_LABEL.DISPLAY_CATEGORY,
+        // children: [],
+      },
+      {
+        key: "create-category",
+        icon: <HomeOutlined />,
+        label: ROUTES_LABEL.CREATE_CATEGORY,
+        // children: [],
+      },
+    ],
   },
   {
     key: "product",

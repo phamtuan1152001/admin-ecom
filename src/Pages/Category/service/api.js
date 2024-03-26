@@ -1,0 +1,5 @@
+export const GET_ALL_CATEGORIES_ADMIN = "/categories/listAllAdmin"
+export const CREATE_CATEGORY = "/categories/create"
+export const GET_DETAIL_CATEGORY = "/categories/detail"
+export const UPDATE_DETAIL_CATEGORY = "/categories/update"
+export const DELETE_DETAIL_CATEGORY = "/categories/delete"

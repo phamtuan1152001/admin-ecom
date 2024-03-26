@@ -24,6 +24,13 @@ import DisplayOrder from '../Pages/Order/Display';
 import DetailOrder from '../Pages/Order/Detail';
 /* End */
 
+/* Category */
+import DisplayCategories from '../Pages/Category/Display/DisplayCategories';
+import CreateCategory from '../Pages/Category/Create/CreateCategory';
+import UpdateCategories from '../Pages/Category/Update/UpdateCategories';
+
+/* End */
+
 const ROUTE_LIST = [
   {
     path: ROUTES.DASHBOARD_PAGE,
@@ -48,6 +55,18 @@ const ROUTE_LIST = [
   {
     path: ROUTES.DETAIL_ORDER,
     element: <DetailOrder />
+  },
+  {
+    path: ROUTES.DISPLAY_CATEGORY,
+    element: <DisplayCategories />
+  },
+  {
+    path: ROUTES.CREATE_CATEGORY,
+    element: <CreateCategory />
+  },
+  {
+    path: ROUTES.UPDATE_CATEGORY,
+    element: <UpdateCategories />
   },
 ]
 
