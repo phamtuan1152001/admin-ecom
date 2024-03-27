@@ -1,5 +1,10 @@
 import slugify from 'slugify';
 import { message } from "antd";
+import moment from 'moment';
+
+export const disabledDate = (current) => {
+  return current.isBefore(moment().subtract(1, 'day'))
+}
 
 export const generatingRandomCode = () => {
   var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

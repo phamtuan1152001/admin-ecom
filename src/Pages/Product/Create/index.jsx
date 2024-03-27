@@ -25,6 +25,7 @@ import {
 } from "../../../styles/overrides";
 import Ckeditor from "../../../components/Ckeditors";
 import UploadImage from "./components/Upload";
+import CustomDatePicker from "../../../components/date-picker";
 
 // @constants
 import { SUCCESS } from '../../../constants';
@@ -42,7 +43,7 @@ function CreateProduct() {
   const [isDisable, setIsDisable] = useState(true);
 
   const [listCategories, setListCategories] = useState([])
-
+  const [isOnSale, setIsOnSale] = useState(false)
   const [listImages, setListImages] = useState([])
   // const [dateStart, setDateStart] = useState('');
   // const [dateEnd, setDateEnd] = useState('');
@@ -142,6 +143,10 @@ function CreateProduct() {
     form.setFieldValue("code", generatingRandomCode())
   }
 
+  const disabledDate = (current) => {
+    return current.isBefore(moment().subtract(1, 'day'))
+  }
+
   return (
     <React.Fragment>
       <Form
@@ -149,7 +154,7 @@ function CreateProduct() {
         name="login"
         layout="vertical"
         onFinish={onFinish}
-        onFieldsChange={handleFormChange}
+        // onFieldsChange={handleFormChange}
         className=""
         requiredMark={false}
         initialValues={{
@@ -158,14 +163,16 @@ function CreateProduct() {
           slug: "",
           images: [],
           description: "",
-          regularPrice: 0,
-          salePrice: 0,
+          regularPrice: undefined,
+          salePrice: undefined,
           onSale: false,
           dateOnSaleFrom: "",
           dateOnSaleTo: "",
-          categories: listCategories[0]?._id,
+          categories: listCategories.length > 0
+            ? listCategories[0]?._id
+            : "65dc591c3edd3bd7d99e724b",
           status: "draft",
-          quantity: 0,
+          quantity: undefined,
           defaultImageId: ""
         }}
       >
@@ -178,7 +185,7 @@ function CreateProduct() {
               rules={[
                 {
                   required: true,
-                  message: "Please, enter your product code",
+                  message: "Please, enter your product's code",
                 },
               ]}
             >
@@ -197,7 +204,7 @@ function CreateProduct() {
               rules={[
                 {
                   required: true,
-                  message: "Please, enter your product name",
+                  message: "Please, enter your product's name",
                 },
               ]}
             >
@@ -214,9 +221,8 @@ function CreateProduct() {
               label={`Slug`}
             >
               <StyledInput
-
                 className=""
-                placeholder={`Enter your product slug`}
+                placeholder={`Enter your product's slug`}
               />
             </StyledFormItem>
 
@@ -224,6 +230,12 @@ function CreateProduct() {
               name="images"
               className=""
               label={`Image`}
+              rules={[
+                {
+                  required: true,
+                  message: "Please, upload your product's images",
+                },
+              ]}
             >
               <UploadImage
                 form={form}
@@ -248,7 +260,7 @@ function CreateProduct() {
             >
               {listImages?.length > 0
                 ? (
-                  <Radio.Group className="flex flex-row justify-start items-center gap-x-4">
+                  <Radio.Group className="flex flex-row justify-start items-center gap-x-4 flex-wrap">
                     {listImages?.map((item, index) => {
                       return (
                         <div key={`${index}-${item?.uid}`} className="flex flex-col justify-between items-center gap-y-1 h-[100px]">
@@ -288,7 +300,7 @@ function CreateProduct() {
               >
                 <StyledInputNumber
                   className=""
-                  placeholder={`Enter your product quantity`}
+                  placeholder={`Enter your product's quantity`}
                 />
               </StyledFormItem>
             </div>
@@ -301,7 +313,7 @@ function CreateProduct() {
                 rules={[
                   {
                     required: true,
-                    message: "Please, enter your product Regular price",
+                    message: "Please, enter your product's regular price",
                   },
                 ]}
               >
@@ -311,69 +323,71 @@ function CreateProduct() {
                   formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
-
-              <StyledFormItem
-                name="salePrice"
-                className=""
-                label={`Sale price`}
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: "Please, enter your product Sale price",
-              //   },
-              // ]}
-              >
-                <StyledInputNumber
-                  className=""
-                  placeholder={`Enter your product Sale price`}
-                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                />
-              </StyledFormItem>
             </div>
 
             <div className="grid grid-cols-2 gap-x-4">
               <StyledFormItem
                 name="onSale"
-                className="col-span-2"
+                // className="col-span-2"
                 label={`Is on sale ?`}
                 valuePropName="checked"
               >
-                <StyledCheckbox>On sale</StyledCheckbox>
+                <StyledCheckbox onClick={() => setIsOnSale(!isOnSale)}>On sale</StyledCheckbox>
               </StyledFormItem>
 
-              <StyledFormItem
-                name="dateOnSaleFrom"
-                className=""
-                label={`Sale from`}
-              >
-                <StyledDatePicker
-                  // disabledDate={disabledDate}
-                  placeholder={`Sale from`}
-                  className=""
-                  style={{ fontSize: 20 }}
-                // disabledDate={current =>
-                //   current.isBefore(moment().subtract(1, 'day')) ||
-                //   (dateStart && dateStart.isAfter(moment(current))) ||
-                //   (dateEnd && dateEnd.isBefore(moment(current)))}
-                // onChange={value => setDateStart(value)}
-                />
-              </StyledFormItem>
+              {isOnSale && (
+                <>
+                  <StyledFormItem
+                    name="salePrice"
+                    className=""
+                    label={`Sale price`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, enter your product Sale price",
+                      },
+                    ]}
+                  >
+                    <StyledInputNumber
+                      className=""
+                      placeholder={`Enter your product Sale price`}
+                      formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    />
+                  </StyledFormItem>
 
-              <StyledFormItem
-                name="dateOnSaleTo"
-                className=""
-                label={`Sale to`}
-              >
-                <StyledDatePicker
-                  // disabledDate={disabledDate}
-                  placeholder={`Sale to`}
-                  className=""
-                  style={{ fontSize: 20 }}
-                // disabledDate={current =>
-                //   (dateStart && dateStart.isAfter(moment(current))) || (dateEnd && dateEnd.isBefore(moment(current)))}
-                // onChange={value => setDateEnd(value)}
-                />
-              </StyledFormItem>
+                  <StyledFormItem
+                    name="dateOnSaleFrom"
+                    className=""
+                    label={`Sale from`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, selecting a date which you want to start product's sale",
+                      },
+                    ]}
+                  >
+                    <CustomDatePicker
+                      disabledDate={disabledDate}
+                    />
+                  </StyledFormItem>
+
+                  <StyledFormItem
+                    name="dateOnSaleTo"
+                    className=""
+                    label={`Sale to`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, selecting a date which you want to end product's sale",
+                      },
+                    ]}
+                  >
+                    <CustomDatePicker
+                      disabledDate={disabledDate}
+                    />
+                  </StyledFormItem>
+                </>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-x-4">
@@ -427,7 +441,7 @@ function CreateProduct() {
         <div className="flex flex-row justify-end items-center">
           <StyledButton
             className={"bg-[#333333] text-white text-base h-[40px]"}
-            disabled={isDisable}
+            // disabled={isDisable}
             loading={loading}
             htmlType="submit"
           >

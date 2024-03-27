@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import moment from 'moment'
 
 // @utility
-import { convertToSlug } from '../../../utility'
+import { convertToSlug, disabledDate } from '../../../utility'
 
 // @components
 import {
@@ -33,6 +33,7 @@ import { ROUTES } from '../../../router/constants'
 // @services
 import { getDetailProduct, updateDetailProduct } from '../service'
 import { getAllCategories } from '../../../services/service-common'
+import CustomDatePicker from '../../../components/date-picker'
 
 function UpdateProduct() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ function UpdateProduct() {
   const [isDisable, setIsDisable] = useState(true);
 
   const [listCategories, setListCategories] = useState([])
-
+  const [isOnSale, setIsOnSale] = useState(true)
   const [listImages, setListImages] = useState([])
   const [description, setDescription] = useState("")
   // const [dateStart, setDateStart] = useState('');
@@ -76,6 +77,7 @@ function UpdateProduct() {
         categories,
         status
       } = product || {}
+      setIsOnSale(onSale)
       setListImages(images)
       setDescription(description)
       form.setFieldsValue({
@@ -245,7 +247,7 @@ function UpdateProduct() {
               rules={[
                 {
                   required: true,
-                  message: "Please, enter your product name",
+                  message: "Please, enter your product's name",
                 },
               ]}
             >
@@ -272,6 +274,12 @@ function UpdateProduct() {
               name="images"
               className=""
               label={`Image`}
+              rules={[
+                {
+                  required: true,
+                  message: "Please, upload your product's images",
+                },
+              ]}
             >
               <UploadImage
                 form={form}
@@ -349,7 +357,7 @@ function UpdateProduct() {
                 rules={[
                   {
                     required: true,
-                    message: "Please, enter your product Regular price",
+                    message: "Please, enter your product's regular price",
                   },
                 ]}
               >
@@ -359,69 +367,68 @@ function UpdateProduct() {
                   formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 />
               </StyledFormItem>
-
-              <StyledFormItem
-                name="salePrice"
-                className=""
-                label={`Sale price`}
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: "Please, enter your product Sale price",
-              //   },
-              // ]}
-              >
-                <StyledInputNumber
-                  className=""
-                  placeholder={`Enter your product Sale price`}
-                  formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                />
-              </StyledFormItem>
             </div>
 
             <div className="grid grid-cols-2 gap-x-4">
               <StyledFormItem
                 name="onSale"
-                className="col-span-2"
+                // className="col-span-2"
                 label={`Is on sale ?`}
                 valuePropName="checked"
               >
-                <StyledCheckbox>On sale</StyledCheckbox>
+                <StyledCheckbox onClick={() => setIsOnSale(!isOnSale)}>On sale</StyledCheckbox>
               </StyledFormItem>
 
-              <StyledFormItem
-                name="dateOnSaleFrom"
-                className=""
-                label={`Sale from`}
-              >
-                <StyledDatePicker
-                  // disabledDate={disabledDate}
-                  placeholder={`Sale from`}
-                  className=""
-                  style={{ fontSize: 20 }}
-                // disabledDate={current =>
-                //   current.isBefore(moment().subtract(1, 'day')) ||
-                //   (dateStart && dateStart.isAfter(moment(current))) ||
-                //   (dateEnd && dateEnd.isBefore(moment(current)))}
-                // onChange={value => setDateStart(value)}
-                />
-              </StyledFormItem>
+              {isOnSale && (
+                <>
+                  <StyledFormItem
+                    name="salePrice"
+                    className=""
+                    label={`Sale price`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, enter your product Sale price",
+                      },
+                    ]}
+                  >
+                    <StyledInputNumber
+                      className=""
+                      placeholder={`Enter your product Sale price`}
+                      formatter={val => `${val}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    />
+                  </StyledFormItem>
 
-              <StyledFormItem
-                name="dateOnSaleTo"
-                className=""
-                label={`Sale to`}
-              >
-                <StyledDatePicker
-                  // disabledDate={disabledDate}
-                  placeholder={`Sale to`}
-                  className=""
-                  style={{ fontSize: 20 }}
-                // disabledDate={current =>
-                //   (dateStart && dateStart.isAfter(moment(current))) || (dateEnd && dateEnd.isBefore(moment(current)))}
-                // onChange={value => setDateEnd(value)}
-                />
-              </StyledFormItem>
+                  <StyledFormItem
+                    name="dateOnSaleFrom"
+                    className=""
+                    label={`Sale from`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, selecting a date which you want to start product's sale",
+                      },
+                    ]}
+                  >
+                    <CustomDatePicker disabledDate={disabledDate} />
+                  </StyledFormItem>
+
+                  <StyledFormItem
+                    name="dateOnSaleTo"
+                    className=""
+                    label={`Sale to`}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please, selecting a date which you want to end product's sale",
+                      },
+                    ]}
+                  >
+                    <CustomDatePicker disabledDate={disabledDate} />
+                  </StyledFormItem>
+                </>
+              )}
+
             </div>
 
             <div className="grid grid-cols-2 gap-x-4">
