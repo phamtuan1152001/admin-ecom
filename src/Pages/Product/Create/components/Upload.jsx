@@ -20,8 +20,46 @@ function UploadImage({ form, values = [], onChange = () => { } }) {
   const handleChange = async (props) => {
     const { file, fileList } = props || {};
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    // console.log("file", file);
-    if (isJpgOrPng) await getBase64Img(file?.originFileObj)
+    // console.log("file", { file, fileList });
+    if (fileList?.length === 1) {
+      if (isJpgOrPng) await getBase64Img(file?.originFileObj)
+    } else {
+      const listBase64 = [];
+      for (const item of fileList) {
+        const base64 = await getBase64ImgMultiple(item?.originFileObj);
+        listBase64.push(base64);
+      }
+      if (listBase64.length >= 2) {
+        console.log("CALLING API HERE")
+        // const imgUpload = listBase64?.map(async (item) => {
+        //   const res = await uploadImg(item);
+        //   if (res?.status === 200) {
+        //     const listImg = {
+        //       uid: res?.data?.version_id,
+        //       url: res?.data?.secure_url,
+        //     };
+        //     return listImg
+        //   }
+        // })
+        // const resolvedPromises = await Promise.all(imgUpload);
+        // console.log("resolvedPromises", resolvedPromises)
+      } else {
+        return
+      }
+    }
+  };
+
+  const getBase64ImgMultiple = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+    });
   };
 
   const handleRemove = (e) => {
@@ -87,6 +125,7 @@ function UploadImage({ form, values = [], onChange = () => { } }) {
         onPreview={handlePreview}
         onChange={handleChange}
         onRemove={(e) => handleRemove(e)}
+        multiple={true}
       >
         {values.length >= 8 ? null : <UploadButton loading={loadingUpload} />}
       </Upload>

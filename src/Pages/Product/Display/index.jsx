@@ -8,6 +8,7 @@ import SearchProductByText from './components/SearchProductByText';
 import SearchProductByCategory from './components/SearchProductByCategory';
 import SearchProductByStatus from './components/SearchProductByStatus';
 import { StyledButton } from '../../../styles/overrides';
+import ImportFile from './components/ImportFile';
 
 // @utility
 import { formatToCurrencyVND } from '../../../utility';
@@ -189,6 +190,8 @@ function DisplayProduct() {
           Back
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
+          <ImportFile />
+
           <SearchProductByText
             onChange={(value) => {
               setProductText(value)
