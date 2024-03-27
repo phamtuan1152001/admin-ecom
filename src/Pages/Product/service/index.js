@@ -5,7 +5,8 @@ import {
   UPLOAD_PRODUCT,
   CREATE_PRODUCT,
   GET_DETAIL_PRODUCT,
-  UPDATE_DETAIL_PRODUCT
+  UPDATE_DETAIL_PRODUCT,
+  UPLOAD_MULTIPLE_IMG_PRODUCT
 } from "./api";
 
 export const updateDetailProduct = async (payload) => {
@@ -43,6 +44,14 @@ export const deleteDetailProduct = async (payload) => {
 
 export const uploadImgProduct = (payload) => {
   return apiMethod.post(UPLOAD_PRODUCT, payload, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export const uploadMultipleImgProduct = (payload) => {
+  return apiMethod.post(UPLOAD_MULTIPLE_IMG_PRODUCT, payload, {
     headers: {
       "Content-Type": "application/json",
     },

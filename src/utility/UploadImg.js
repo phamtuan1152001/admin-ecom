@@ -1,4 +1,4 @@
-import { uploadImgProduct } from "../Pages/Product/service";
+import { uploadImgProduct, uploadMultipleImgProduct } from "../Pages/Product/service";
 
 export const uploadImg = (base64ImgEncode) => {
   // try {
@@ -18,4 +18,8 @@ export const uploadImg = (base64ImgEncode) => {
   // } catch (err) {
   //   console.log("err", err);
   // }
+};
+
+export const uploadMultipleImg = (base64ImgEncode) => {
+  return uploadMultipleImgProduct({ data: base64ImgEncode });
 };

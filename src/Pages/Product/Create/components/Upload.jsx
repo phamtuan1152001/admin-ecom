@@ -8,7 +8,7 @@ import {
 } from "antd";
 
 // @utility
-import { uploadImg } from '../../../../utility/UploadImg';
+import { uploadImg, uploadMultipleImg } from '../../../../utility/UploadImg';
 import { validateFile } from '../../../../utility';
 
 function UploadImage({ form, values = [], onChange = () => { } }) {
@@ -30,19 +30,18 @@ function UploadImage({ form, values = [], onChange = () => { } }) {
         listBase64.push(base64);
       }
       if (listBase64.length >= 2) {
-        console.log("CALLING API HERE")
-        // const imgUpload = listBase64?.map(async (item) => {
-        //   const res = await uploadImg(item);
-        //   if (res?.status === 200) {
-        //     const listImg = {
-        //       uid: res?.data?.version_id,
-        //       url: res?.data?.secure_url,
-        //     };
-        //     return listImg
-        //   }
-        // })
-        // const resolvedPromises = await Promise.all(imgUpload);
-        // console.log("resolvedPromises", resolvedPromises)
+        // console.log("CALLING API HERE", listBase64)
+        const { data, status } = await uploadMultipleImg(listBase64)
+        if (status === 200) {
+          const listMultipleImage = data?.map(item => {
+            return {
+              uid: item?.public_id,
+              url: item?.secure_url
+            }
+          })
+          // console.log("listMultipleImage", listMultipleImage);
+          onChange(listMultipleImage)
+        }
       } else {
         return
       }
