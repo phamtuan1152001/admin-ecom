@@ -4,6 +4,7 @@ import {
   DELETE_DETAIL_PRODUCT,
   UPLOAD_PRODUCT,
   CREATE_PRODUCT,
+  CREATE_MULTIPLE_PRODUCTS,
   GET_DETAIL_PRODUCT,
   UPDATE_DETAIL_PRODUCT,
   UPLOAD_MULTIPLE_IMG_PRODUCT,
@@ -15,6 +16,13 @@ import {
 } from "./api";
 
 /* PRODUCTS */
+export const createMultipleProducts = async (payload) => {
+  const { data } = await apiMethod.post(CREATE_MULTIPLE_PRODUCTS, {
+    ...payload
+  })
+  return data
+}
+
 export const updateDetailProduct = async (payload) => {
   const { productId, ...rest } = payload || {}
   const { data } = await apiMethod.put(UPDATE_DETAIL_PRODUCT + `/${productId}`, {

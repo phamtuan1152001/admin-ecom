@@ -180,6 +180,18 @@ function DisplayProduct() {
     },
   ];
 
+  const handleReloadTable = () => {
+    const req = {
+      page: PAGE_SIZE,
+      size: PAGE_LIMIT,
+      categories: categoryId,
+      productText: productText,
+      status: status,
+      userId: JSON.parse(localStorage.getItem("USER_INFO")).id
+    }
+    fetchGetListProducts(req)
+  }
+
   return (
     <React.Fragment>
       <div className='flex flex-row justify-between items-center mb-4'>
@@ -190,7 +202,7 @@ function DisplayProduct() {
           Back
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
-          <ImportFile />
+          <ImportFile reload={handleReloadTable} />
 
           <SearchProductByText
             onChange={(value) => {
