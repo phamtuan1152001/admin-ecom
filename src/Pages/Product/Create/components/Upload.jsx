@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 // @components
 import UploadButton from './upload-button';
@@ -17,36 +17,65 @@ function UploadImage({ form, values = [], onChange = () => { } }) {
 
   const [loadingUpload, setLoadingUpload] = useState(false);
 
-  const handleChange = async (props) => {
-    const { file, fileList } = props || {};
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    // console.log("file", { file, fileList });
-    if (fileList?.length === 1) {
-      if (isJpgOrPng) await getBase64Img(file?.originFileObj)
-    } else {
-      const listBase64 = [];
-      for (const item of fileList) {
-        const base64 = await getBase64ImgMultiple(item?.originFileObj);
-        listBase64.push(base64);
-      }
-      if (listBase64.length >= 2) {
-        // console.log("CALLING API HERE", listBase64)
-        const { data, status } = await uploadMultipleImg(listBase64)
-        if (status === 200) {
-          const listMultipleImage = data?.map(item => {
-            return {
-              uid: item?.public_id,
-              url: item?.secure_url
-            }
-          })
-          // console.log("listMultipleImage", listMultipleImage);
-          onChange(listMultipleImage)
+  const handleChange = (() => {
+    let uploadTimeout = null; // Define the upload timeout variable outside of the handleChange function
+
+    return async (props) => {
+
+      const { file, fileList } = props || {};
+      const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+      // console.log("file", { file, fileList });
+
+      // Define a delay in milliseconds
+      const delay = 1000; // Adjust this value as needed
+
+      // Function to upload images after a delay
+      const uploadImagesAfterDelay = async () => {
+        const listBase64 = [];
+        for (const item of fileList) {
+          const isJpgOrPngMultiple = item.type === "image/jpeg" || item.type === "image/png";
+          if (isJpgOrPngMultiple) {
+            const base64 = await getBase64ImgMultiple(item?.originFileObj);
+            listBase64.push(base64);
+          }
         }
+        if (listBase64.length > 0) {
+          // console.log("CALLING API HERE", listBase64);
+          fetchUploadMultipleImg(listBase64)
+        }
+      };
+
+      // If there is only one file and it's an image, upload immediately
+      if (fileList?.length === 1 && isJpgOrPng) {
+        await getBase64Img(file?.originFileObj);
       } else {
-        return
+        // If there are multiple files, debounce the upload
+        if (uploadTimeout) {
+          // console.log("uploadTimeout", uploadTimeout);
+          clearTimeout(uploadTimeout);
+        }
+        uploadTimeout = setTimeout(uploadImagesAfterDelay, delay);
       }
+    };
+  })()
+
+  const fetchUploadMultipleImg = async (listBase64) => {
+    try {
+      setLoadingUpload(true);
+      const { data, status } = await uploadMultipleImg(listBase64);
+      if (status === 200) {
+        const listMultipleImage = data?.map(item => ({
+          uid: item?.public_id,
+          url: item?.secure_url
+        }));
+        onChange(listMultipleImage);
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
+    } finally {
+      setLoadingUpload(false);
     }
-  };
+  }
 
   const getBase64ImgMultiple = (file) => {
     return new Promise((resolve, reject) => {
