@@ -8,10 +8,10 @@ import {
 } from "antd";
 
 // @utility
-import { uploadImg, uploadMultipleImg } from '../../../../utility/UploadImg';
-import { validateFile } from '../../../../utility';
+import { uploadImg, uploadMultipleImg } from '../../utility/UploadImg';
+import { validateFile } from '../../utility';
 
-function UploadImage({ form, values = [], onChange = () => { } }) {
+function ImageUpload({ form, values = [], onChange = () => { } }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
 
@@ -174,4 +174,4 @@ function UploadImage({ form, values = [], onChange = () => { } }) {
   )
 }
 
-export default UploadImage
+export default ImageUpload

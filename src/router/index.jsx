@@ -18,6 +18,8 @@ import DisplayProduct from '../Pages/Product/Display';
 import CreateProduct from '../Pages/Product/Create';
 import UpdateProduct from '../Pages/Product/Update';
 import ManageImport from '../Pages/Product/ManageImport';
+import CreateManageImport from '../Pages/Product/ManageImport/CreateManageImport';
+import EditManageImport from '../Pages/Product/ManageImport/EditManageImport';
 /* End */
 
 /* Order */
@@ -72,6 +74,14 @@ const ROUTE_LIST = [
   {
     path: ROUTES.MANAGE_IMPORT,
     element: <ManageImport />
+  },
+  {
+    path: ROUTES.CREATE_MANAGE_IMPORT,
+    element: <CreateManageImport />
+  },
+  {
+    path: ROUTES.UPDATE_MANAGE_IMPORT,
+    element: <EditManageImport />
   },
 ]
 

@@ -19,6 +19,7 @@ import { ROUTES } from '../../../router/constants';
 
 // @services
 import { deleteDetailImport, getListImports } from '../service';
+import moment from 'moment';
 
 function ManageImport() {
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ function ManageImport() {
         setListImports(list)
       }
     } catch (err) {
-      console.log("FETCH FAIL!")
+      console.log("FETCH FAIL!", err)
     } finally {
       setLoading(false)
     }
@@ -90,12 +91,12 @@ function ManageImport() {
   }
 
   const goToEditProduct = (data) => {
-    console.log("data", data);
-    // navigate(ROUTES.UPDATE_PRODUCT, {
-    //   state: {
-    //     productInfo: data
-    //   }
-    // })
+    // console.log("data", data);
+    navigate(ROUTES.UPDATE_MANAGE_IMPORT, {
+      state: {
+        importInfo: data
+      }
+    })
   }
 
   const columnsTable = [
@@ -111,8 +112,13 @@ function ManageImport() {
     },
     {
       title: "Created",
-      dataIndex: "created",
-      key: "created",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (date) => {
+        return moment(date).isValid()
+          ? moment(date).format("DD/MM/YYYY HH:mm")
+          : "--"
+      }
     },
     {
       title: "Edit",
