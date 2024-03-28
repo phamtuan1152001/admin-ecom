@@ -17,6 +17,7 @@ import Home from '../Pages/Home';
 import DisplayProduct from '../Pages/Product/Display';
 import CreateProduct from '../Pages/Product/Create';
 import UpdateProduct from '../Pages/Product/Update';
+import ManageImport from '../Pages/Product/ManageImport';
 /* End */
 
 /* Order */
@@ -67,6 +68,10 @@ const ROUTE_LIST = [
   {
     path: ROUTES.UPDATE_CATEGORY,
     element: <UpdateCategories />
+  },
+  {
+    path: ROUTES.MANAGE_IMPORT,
+    element: <ManageImport />
   },
 ]
 

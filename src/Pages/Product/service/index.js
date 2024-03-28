@@ -6,7 +6,12 @@ import {
   CREATE_PRODUCT,
   GET_DETAIL_PRODUCT,
   UPDATE_DETAIL_PRODUCT,
-  UPLOAD_MULTIPLE_IMG_PRODUCT
+  UPLOAD_MULTIPLE_IMG_PRODUCT,
+  CREATE_IMPORT,
+  GET_LIST_IMPORTS,
+  GET_DETAIL_IMPORT,
+  UPDATE_DETAIL_IMPORT,
+  DELETE_DETAIL_IMPORT
 } from "./api";
 
 export const updateDetailProduct = async (payload) => {
@@ -57,3 +62,38 @@ export const uploadMultipleImgProduct = (payload) => {
     },
   });
 };
+
+export const getListImports = async (payload) => {
+  const { data } = await apiMethod.post(GET_LIST_IMPORTS, {
+    ...payload
+  })
+  return data
+}
+
+export const createImport = async (payload) => {
+  const { data } = await apiMethod.post(CREATE_IMPORT, {
+    ...payload
+  })
+  return data
+}
+
+export const getDetailImport = async (payload) => {
+  const { data } = await apiMethod.post(GET_DETAIL_IMPORT + `/${payload?.importId}`, {
+    userId: payload?.userId
+  })
+  return data
+}
+
+export const updateDetailImport = async (payload) => {
+  const { data } = await apiMethod.put(UPDATE_DETAIL_IMPORT + `/${payload?._id}`, {
+    ...payload
+  })
+  return data
+}
+
+export const deleteDetailImport = async (payload) => {
+  const { data } = await apiMethod.put(DELETE_DETAIL_IMPORT + `/${payload?.importId}`, {
+    userId: payload?.userId
+  })
+  return data
+}

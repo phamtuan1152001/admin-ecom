@@ -76,6 +76,12 @@ const ROUTES = [
         label: ROUTES_LABEL.CREATE_PRODUCT,
         // children: [],
       },
+      {
+        key: "manage-import",
+        icon: <HomeOutlined />,
+        label: ROUTES_LABEL.MANAGE_IMPORT,
+        // children: [],
+      },
     ],
   },
   {
