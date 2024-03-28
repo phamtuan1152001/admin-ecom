@@ -106,6 +106,14 @@ function EditManageImport() {
 
   return (
     <React.Fragment>
+      <div className='flex flex-row justify-between items-center mb-4'>
+        <StyledButton
+          className={"bg-[#333333] text-white text-base h-[35px] px-4"}
+          onClick={() => navigate(-1)}
+        >
+          Back
+        </StyledButton>
+      </div>
       <Form
         form={form}
         name="login"

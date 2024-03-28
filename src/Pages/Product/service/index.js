@@ -14,6 +14,7 @@ import {
   DELETE_DETAIL_IMPORT
 } from "./api";
 
+/* PRODUCTS */
 export const updateDetailProduct = async (payload) => {
   const { productId, ...rest } = payload || {}
   const { data } = await apiMethod.put(UPDATE_DETAIL_PRODUCT + `/${productId}`, {
@@ -47,6 +48,7 @@ export const deleteDetailProduct = async (payload) => {
   return data
 }
 
+/* UPLOAD TO CLOUDINARY */
 export const uploadImgProduct = (payload) => {
   return apiMethod.post(UPLOAD_PRODUCT, payload, {
     headers: {
@@ -62,6 +64,8 @@ export const uploadMultipleImgProduct = (payload) => {
     },
   });
 };
+
+/* Manage Imports */
 
 export const getListImports = async (payload) => {
   const { data } = await apiMethod.post(GET_LIST_IMPORTS, {
@@ -92,8 +96,6 @@ export const updateDetailImport = async (payload) => {
 }
 
 export const deleteDetailImport = async (payload) => {
-  const { data } = await apiMethod.put(DELETE_DETAIL_IMPORT + `/${payload?.importId}`, {
-    userId: payload?.userId
-  })
+  const { data } = await apiMethod.delete(DELETE_DETAIL_IMPORT + `/${payload?.importId}`)
   return data
 }

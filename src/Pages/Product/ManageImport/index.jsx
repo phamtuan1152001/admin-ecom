@@ -68,7 +68,7 @@ function ManageImport() {
     try {
       const req = {
         importId: id,
-        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+        // userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
       }
       const res = await deleteDetailImport(req)
       if (res?.retCode === SUCCESS) {
