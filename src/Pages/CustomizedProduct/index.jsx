@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Table, notification, Input } from "antd";
 import { StyledButton } from '../../styles/overrides';
 import SearchItem from '../../components/search';
+import FormCustomizedProduct from './components/FormCustomizedProduct';
 
 // @utility
 import { formatToCurrencyVND } from '../../utility';
@@ -29,6 +30,7 @@ import {
   LIMIT_DEFAULT
 } from '../../constants';
 import { ROUTES } from '../../router/constants';
+import Dialog from '../../components/dialog';
 
 const CustomizedProduct = () => {
   const navigate = useNavigate()
@@ -38,6 +40,8 @@ const CustomizedProduct = () => {
   const [page, setPage] = useState({});
   const [listCustomizedProducts, setListCustomizedProducts] = useState([])
   const [search, setSearch] = useState("")
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [detailRecord, setDetailRecord] = useState({})
 
   useEffect(() => {
     const req = {
@@ -78,7 +82,7 @@ const CustomizedProduct = () => {
         return (
           <span
             className={
-              classNames("capitalize bg-[#fff3cd] text-[#856404] py-1 px-2 rounded-md text-base font-bold border border-[#ffeeba]")
+              classNames("capitalize bg-[#fff3cd] text-[#856404] py-1 px-2 rounded-md text-base font-normal border border-[#ffeeba]")
             }
           >
             Pending
@@ -88,7 +92,7 @@ const CustomizedProduct = () => {
         return (
           <span
             className={
-              classNames("capitalize bg-[#c3e6cb] text-[#155724] py-1 px-2 rounded-md text-base font-bold border border-[#c3e6cb]")
+              classNames("capitalize bg-[#c3e6cb] text-[#155724] py-1 px-2 rounded-md text-base font-normal border border-[#c3e6cb]")
             }
           >
             Confirmed
@@ -98,7 +102,7 @@ const CustomizedProduct = () => {
         return (
           <span
             className={
-              classNames("capitalize bg-[#f8d7da] text-[#721c24] py-1 px-2 rounded-md text-base font-bold border border-[#f5c6cb]")
+              classNames("capitalize bg-[#f8d7da] text-[#721c24] py-1 px-2 rounded-md text-base font-normal border border-[#f5c6cb]")
             }
           >
             Cancel
@@ -178,21 +182,53 @@ const CustomizedProduct = () => {
           <div className="flex flex-row justify-around items-center">
             <div
               className="edit-icon d-flex flex-column justify-content-center align-items-center cursor-pointer"
-            // onClick={() => goToEditProduct(record)}
+              onClick={() => {
+                onOpenDialog()
+                setDetailRecord(record)
+              }}
             >
               <EditIcon width={15} height={15} />
             </div>
-            <div
+            {/* <div
               className="delete-icon d-flex flex-column justify-content-center align-items-center cursor-pointer"
             // onClick={() => fetchDeleteDetailProduct(record?._id)}
             >
               <DeleteIcon width={15} height={15} />
-            </div>
+            </div> */}
           </div>
         );
       },
     },
   ];
+
+  const onOpenDialog = () => {
+    setIsOpenModal(!isOpenModal)
+  }
+
+  const fetchUpdateStatusCustomizedProduct = async (values) => {
+    // console.log("v", values)
+    try {
+      const req = { ...values }
+      const res = await updateStatusProductAdmin(req)
+      if (res?.retCode === SUCCESS) {
+        notification.success({
+          message: "Successfully",
+          description: res?.retText,
+          duration: 2,
+        });
+        onOpenDialog()
+        const req = {
+          page: page?.currentPage + 1,
+          size: PAGE_LIMIT,
+          userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
+          search: search
+        }
+        fetchGetListCustomizedProducts(req)
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
+    }
+  }
 
   return (
     <React.Fragment>
@@ -235,6 +271,16 @@ const CustomizedProduct = () => {
           },
         }}
       />
+      <Dialog
+        title='CUSTOMIZED PRODUCT INFORMATION'
+        isOpen={isOpenModal}
+        onOpen={setIsOpenModal}
+      >
+        <FormCustomizedProduct
+          data={detailRecord}
+          onSubmit={fetchUpdateStatusCustomizedProduct}
+        />
+      </Dialog>
     </React.Fragment>
   )
 }

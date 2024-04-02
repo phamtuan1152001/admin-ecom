@@ -27,7 +27,7 @@ export const updateStatusProductAdmin = async (payload) => {
   const { data } = await apiMethod.put(
     UPDATE_DETAIL_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?._id}`,
     {
-      payload
+      ...payload
     }
   )
   return data
