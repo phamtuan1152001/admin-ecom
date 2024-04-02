@@ -91,6 +91,12 @@ const ROUTES = [
     ],
   },
   {
+    key: "customized-product",
+    icon: <ProductOutlined />,
+    label: ROUTES_LABEL.CUSTOMIZED_PRODUCT_LABEL,
+    // children: []
+  },
+  {
     key: "order",
     icon: <AuditOutlined />,
     label: ROUTES_LABEL.ORDER_LABEL,

@@ -22,6 +22,10 @@ import CreateManageImport from '../Pages/Product/ManageImport/CreateManageImport
 import EditManageImport from '../Pages/Product/ManageImport/EditManageImport';
 /* End */
 
+/* Customized product */
+import CustomizedProduct from '../Pages/CustomizedProduct';
+/* End */
+
 /* Order */
 import DisplayOrder from '../Pages/Order/Display';
 import DetailOrder from '../Pages/Order/Detail';
@@ -82,6 +86,10 @@ const ROUTE_LIST = [
   {
     path: ROUTES.UPDATE_MANAGE_IMPORT,
     element: <EditManageImport />
+  },
+  {
+    path: ROUTES.CUSTOMIZED_PRODUCT,
+    element: <CustomizedProduct />
   },
 ]
 
