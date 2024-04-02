@@ -1,6 +1,7 @@
 import apiMethod from "../../../utility/apiMethod";
 import {
   GET_LIST_CUSTOMIZED_PRODUCT_ADMIN,
+  GET_DETAIL_CUSTOMIZED_PRODUCT_ADMIN,
   UPDATE_DETAIL_CUSTOMIZED_PRODUCT_ADMIN,
   DELETE_DETAIL_CUSTOMIZED_PRODUCT_ADMIN
 } from "./api";
@@ -11,6 +12,13 @@ export const getListCustomizedProductAdmin = async (payload) => {
     {
       ...payload
     }
+  )
+  return data
+}
+
+export const getDetailCustomizedProductAdmin = async (payload) => {
+  const { data } = await apiMethod.get(
+    GET_DETAIL_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?._id}`
   )
   return data
 }
