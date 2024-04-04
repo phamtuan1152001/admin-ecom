@@ -26,6 +26,11 @@ import EditManageImport from '../Pages/Product/ManageImport/EditManageImport';
 import CustomizedProduct from '../Pages/CustomizedProduct';
 /* End */
 
+/* Order customized product */
+import OrderCustomizedProduct from '../Pages/OrderCustomizedProduct/Display';
+import UpdateOrderCustomizedProduct from '../Pages/OrderCustomizedProduct/Update';
+/* End */
+
 /* Order */
 import DisplayOrder from '../Pages/Order/Display';
 import DetailOrder from '../Pages/Order/Detail';
@@ -90,6 +95,14 @@ const ROUTE_LIST = [
   {
     path: ROUTES.CUSTOMIZED_PRODUCT,
     element: <CustomizedProduct />
+  },
+  {
+    path: ROUTES.DISPLAY_ORDER_CUSTOMIZED_PRODUCT,
+    element: <OrderCustomizedProduct />
+  },
+  {
+    path: ROUTES.UPDATE_ORDER_CUSTOMIZED_PRODUCT,
+    element: <UpdateOrderCustomizedProduct />
   },
 ]
 

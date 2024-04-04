@@ -5,7 +5,7 @@ import { StyledInput } from "../../styles/overrides"
 
 let timeoutId;
 
-function SearchItem({ onChange = () => { } }) {
+function SearchByText({ onChange = () => { } }) {
   // search
   const [input, setInput] = useState("");
   const [prevSearch, setPrevSearch] = useState("");
@@ -41,4 +41,4 @@ function SearchItem({ onChange = () => { } }) {
   )
 }
 
-export default SearchItem
+export default SearchByText

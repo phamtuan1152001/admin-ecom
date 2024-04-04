@@ -6,7 +6,8 @@ import moment from 'moment';
 // @antd
 import { Table, notification, Input } from "antd";
 import { StyledButton } from '../../styles/overrides';
-import SearchItem from '../../components/search';
+import { SearchByText } from '../../components/search';
+
 import FormCustomizedProduct from './components/FormCustomizedProduct';
 
 // @utility
@@ -240,7 +241,7 @@ const CustomizedProduct = () => {
           Back
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
-          <SearchItem
+          <SearchByText
             onChange={(value) => {
               setSearch(value)
             }}

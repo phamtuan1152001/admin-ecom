@@ -107,6 +107,12 @@ const ROUTES = [
         label: ROUTES_LABEL.DISPLAY_ORDER,
         // children: [],
       },
+      {
+        key: "display-order-customized-product",
+        icon: <HomeOutlined />,
+        label: ROUTES_LABEL.DISPLAY_ORDER_CUSTOMIZED_PRODUCT,
+        // children: [],
+      },
     ],
   },
   {

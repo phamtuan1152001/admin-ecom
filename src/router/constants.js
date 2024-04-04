@@ -16,7 +16,9 @@ export const ROUTES = {
   DISPLAY_VOUCHER: "/voucher/display-voucher",
   CREATE_VOUCHER: "/voucher/create-voucher",
   UPDATE_VOUCHER: "/voucher/update-voucher",
-  CUSTOMIZED_PRODUCT: "/customized-product"
+  CUSTOMIZED_PRODUCT: "/customized-product",
+  DISPLAY_ORDER_CUSTOMIZED_PRODUCT: "/order/display-order-customized-product",
+  UPDATE_ORDER_CUSTOMIZED_PRODUCT: "/order/update-order-customized-product",
 }
 
 export const ROUTES_LABEL = {
@@ -31,7 +33,8 @@ export const ROUTES_LABEL = {
   MANAGE_IMPORT: "Manage import",
   CREATE_MANAGE_IMPORT: "Create manage import",
   ORDER_LABEL: "Order",
-  DISPLAY_ORDER: "List of orders",
+  DISPLAY_ORDER: "Order products",
+  DISPLAY_ORDER_CUSTOMIZED_PRODUCT: "Order customized products",
   VOUCHER_LABEL: "Voucher",
   DISPLAY_VOUCHER: "List of vouchers",
   CREATE_VOUCHER: "Create voucher",
