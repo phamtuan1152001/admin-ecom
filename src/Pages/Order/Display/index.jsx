@@ -6,8 +6,7 @@ import moment from 'moment';
 // @antd
 import { Table, notification, Input } from "antd";
 import { StyledButton } from '../../../styles/overrides';
-import SearchOrderByText from './components/SearchOrderByText';
-import SearchOrderByDate from './components/SearchOrderByDate';
+import { SearchByDate, SearchByText } from "../../../components/search/index"
 
 // @utility
 import { formatToCurrencyVND } from '../../../utility';
@@ -238,13 +237,13 @@ function DisplayOrder() {
           Back
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
-          <SearchOrderByText
+          <SearchByText
             onChange={(value) => {
               // console.log("value", value);
               setOrderText(value)
             }}
           />
-          <SearchOrderByDate
+          <SearchByDate
             onChange={(v) => {
               if (!!v) {
                 const start = moment(v[0]?.$d).format()
