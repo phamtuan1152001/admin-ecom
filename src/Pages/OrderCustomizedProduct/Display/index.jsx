@@ -98,7 +98,7 @@ function OrderCustomizedProduct() {
 
   const gotoDetailOrder = (data) => {
     // console.log("data", data);
-    navigate(ROUTES.DETAIL_ORDER, {
+    navigate(ROUTES.UPDATE_ORDER_CUSTOMIZED_PRODUCT, {
       state: {
         orderInfo: data
       }

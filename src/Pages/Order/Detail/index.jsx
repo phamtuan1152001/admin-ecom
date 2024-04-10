@@ -16,7 +16,7 @@ import { formatToCurrencyVND } from '../../../utility';
 import { getDetailOrderAdmin, updateStatusOrderAdmin } from '../service';
 
 // @icon
-import { CartIcon, PaymentSuccessStatus, PaymentFailIcon } from '../../../assets/svg';
+import { CartIcon, PaymentSuccessStatus, PaymentFailIcon, SuccessStatus, FailStatus, PendingStatus } from '../../../assets/svg';
 import PaymentPendingIcon from "../../../assets/images/pending-icon.png"
 
 function DetailOrder() {
@@ -87,7 +87,7 @@ function DetailOrder() {
         return (
           <div className="flex flex-col justify-center items-center gap-y-4">
             <div className="flex flex-col justify-center items-center">
-              <img src={PaymentPendingIcon} alt='pending-icon' />
+              <PendingStatus />
             </div>
             <h2 className="text-lg font-bold text-yellow-500">
               This payment is waiting for purchasing
@@ -98,7 +98,7 @@ function DetailOrder() {
         return (
           <div className="flex flex-col justify-center items-center gap-y-4">
             <div className="flex flex-col justify-center items-center">
-              <PaymentSuccessStatus />
+              <SuccessStatus />
             </div>
             <h2 className="text-lg font-bold text-[#4EC389]">
               This payment has been paid successfully
@@ -109,7 +109,7 @@ function DetailOrder() {
         return (
           <div className="flex flex-col justify-center items-center gap-y-4">
             <div className="flex flex-col justify-center items-center">
-              <PaymentFailIcon />
+              <FailStatus />
             </div>
             <h2 className="text-lg font-bold text-red-500">
               This payment has been canceled
