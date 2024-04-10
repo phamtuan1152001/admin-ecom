@@ -1,0 +1,1 @@
+export const GET_LIST_RANKING_PRODUCTS = "/ranking-products/get-list-client"
