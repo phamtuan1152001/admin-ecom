@@ -16,8 +16,7 @@ import { formatToCurrencyVND } from '../../../utility';
 import { getDetailOrderAdmin, updateStatusOrderAdmin } from '../service';
 
 // @icon
-import { CartIcon, PaymentSuccessStatus, PaymentFailIcon, SuccessStatus, FailStatus, PendingStatus } from '../../../assets/svg';
-import PaymentPendingIcon from "../../../assets/images/pending-icon.png"
+import { CartIcon, SuccessStatus, FailStatus, PendingStatus } from '../../../assets/svg';
 
 function DetailOrder() {
   const navigate = useNavigate();
@@ -187,7 +186,7 @@ function DetailOrder() {
               </h3>
             </div>
             <div className="flex flex-row justify-between items-center">
-              <h3 className="text-base font-normal text-[#637381]">Tạm tính</h3>
+              <h3 className="text-base font-normal text-[#637381]">Provisional price</h3>
               <h3 className="text-base font-bold text-[#000000]">
                 {formatToCurrencyVND(detailOrder?.cartDetail?.totalPrice)}
               </h3>

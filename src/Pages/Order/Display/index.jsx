@@ -215,12 +215,12 @@ function DisplayOrder() {
             >
               <EditIcon width={15} height={15} />
             </div>
-            <div
+            {/* <div
               className="delete-icon d-flex flex-column justify-content-center align-items-center cursor-pointer"
               onClick={() => fetchDeleteDetailOrder(record?._id)}
             >
               <DeleteIcon width={15} height={15} />
-            </div>
+            </div> */}
           </div>
         );
       },

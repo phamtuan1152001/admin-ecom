@@ -17,8 +17,8 @@ export const getListOrderCustomizedProductAdmin = async (payload) => {
 
 export const getDetailOrderCustomizedProductAdmin = async (payload) => {
   const { data } = await apiMethod.post(
-    GET_DETAIL_ORDER_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?.id}`, {
-    ...payload
+    GET_DETAIL_ORDER_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?.orderId}`, {
+    userId: payload?.userId
   }
   )
   return data
@@ -26,7 +26,7 @@ export const getDetailOrderCustomizedProductAdmin = async (payload) => {
 
 export const updateDetailOrderCustomizedProductAdmin = async (payload) => {
   const { data } = await apiMethod.put(
-    UPDATE_DETAIL_ORDER_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?.id}`, {
+    UPDATE_DETAIL_ORDER_CUSTOMIZED_PRODUCT_ADMIN + `/${payload?._id}`, {
     ...payload
   }
   )
