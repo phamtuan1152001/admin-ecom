@@ -80,7 +80,13 @@ function DashboardPage() {
     xField: 'name',
     yField: 'value',
     height: 700,
-    title: `${RENDER_TITLE(actionType)} ( ${moment(dateStart).format("DD/MM/YYYY")} - ${moment(dateEnd).format("DD/MM/YYYY")} )`,
+    title: {
+      title: `${RENDER_TITLE(actionType)} ( ${moment(dateStart).format("DD/MM/YYYY")} - ${moment(dateEnd).format("DD/MM/YYYY")} )`,
+      style: {
+        align: "center",
+        titleFontSize: 22
+      }
+    },
     style: {
       maxWidth: 100
     },
@@ -88,11 +94,16 @@ function DashboardPage() {
     colorField: 'name',
     axis: {
       x: {
-        // size: 12,
-        labelFormatter: (datum, index) => {
-          return styleXAxis(datum, index)
-        },
-        // labelFormatter: (val) => `${val.substring(0, 20)} ...`,
+        labelFontWeight: 700,
+        labelFill: "red",
+        labelFontSize: 16,
+        // labelStroke: "yellow",
+        labelFormatter: (val) => `${val?.split(" ")?.map(word => word[0])?.join("")}`,
+      },
+      y: {
+        labelFontWeight: 700,
+        labelFill: "red",
+        labelFontSize: 16,
       },
     },
     legend: false,
