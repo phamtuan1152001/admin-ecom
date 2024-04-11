@@ -101,7 +101,7 @@ function DashboardPage() {
 
   return (
     <div className='space-y-8'>
-      <div className='flex flex-row justify-end items-center gap-3 w-[50%]'>
+      <div className='flex flex-row justify-end items-center gap-3 w-[30%]'>
         <StyledSelect
           className='w-[150px]'
           defaultValue={2}
