@@ -15,3 +15,33 @@ export const PAYMENT_METHOD_TYPE = {
   METAMASK: "metamask",
   APP_BANKING: "other"
 }
+
+export const TYPE_FILTER = (type) => {
+  switch (type) {
+    case 1:
+      return "countBuy"
+    case 2:
+      return "countReview"
+    case 3:
+      return "countIntroduce"
+    case 4:
+      return "countSave"
+    default:
+      return
+  }
+}
+
+export const RENDER_TITLE = (type) => {
+  switch (type) {
+    case 1:
+      return "THE CHART ILLUSTRATES THE NUMBER OF PRODUCTS PURCHASED BY USERS"
+    case 2:
+      return "THE GRAPH ILLUSTRATES THE NUMBER OF PRODUCTS VIEWED BY USERS"
+    case 3:
+      return "THE CHART ILLUSTRATES THE NUMBER OF PRODUCTS RECOMMENDED BY USERS"
+    case 4:
+      return "THE GRAPH ILLUSTRATES THE NUMBER OF PRODUCTS SAVED BY USERS"
+    default:
+      return
+  }
+}

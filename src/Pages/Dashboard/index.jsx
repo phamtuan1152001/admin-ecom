@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 
 // @antd
@@ -12,15 +12,17 @@ import { getListRankingProducts } from './service'
 
 // constants
 import { PAGE_SIZE, PAGE_LIMIT, SUCCESS } from '../../constants'
-
+import { TYPE_FILTER, RENDER_TITLE } from '../../constants'
 
 function DashboardPage() {
+  const chartRef = useRef(null);
+
   const [loading, setLoading] = useState(false)
 
   const [rankingProducts, setRankingProducts] = useState([])
 
-  const [dateStart, setDateStart] = useState(moment().subtract(1, "months").startOf("M").format())
-  const [dateEnd, setDateEnd] = useState(moment().subtract(1, "months").endOf("M").format())
+  const [dateStart, setDateStart] = useState(moment().startOf("M").format())
+  const [dateEnd, setDateEnd] = useState(moment().endOf("M").format())
   const [actionType, setActionType] = useState(2)
 
   useEffect(() => {
@@ -33,36 +35,6 @@ function DashboardPage() {
     }
     fetchGetListRankingProducts(req)
   }, [dateStart, dateEnd, actionType])
-
-  const TYPE_FILTER = (type) => {
-    switch (type) {
-      case 1:
-        return "countBuy"
-      case 2:
-        return "countReview"
-      case 3:
-        return "countIntroduce"
-      case 4:
-        return "countSave"
-      default:
-        return
-    }
-  }
-
-  const RENDER_TITLE = (type) => {
-    switch (type) {
-      case 1:
-        return "The chart illustrates the number of products purchased by users"
-      case 2:
-        return "The graph illustrates the number of products viewed by users"
-      case 3:
-        return "The chart illustrates the number of products recommended by users"
-      case 4:
-        return "The graph illustrates the number of products saved by users"
-      default:
-        return
-    }
-  }
 
   const fetchGetListRankingProducts = async (payload) => {
     try {
@@ -85,41 +57,46 @@ function DashboardPage() {
     }
   }
 
+  const styleXAxis = (item, index) => {
+    const { chart } = chartRef.current;
+    const { document } = chart.getContext().canvas;
+    const group = document?.createElement('g', {});
+    const text = rankingProducts.map(item => item?.name)[index];
+    const label = document.createElement('text', {
+      style: {
+        text: text?.split(" ")?.map(word => word[0])?.join(""),
+        fill: 'black',
+        textAlign: 'center',
+        transform: `translate(0, 25)`,
+        fontWeight: 600
+      },
+    });
+    group.appendChild(label);
+    return group;
+  }
+
   const config = {
     data: rankingProducts,
     xField: 'name',
     yField: 'value',
     height: 700,
-    title: `${RENDER_TITLE(actionType)} - ${moment(dateStart).format("MM/YYYY")}`,
-    // subTitle: "haha",
+    title: `${RENDER_TITLE(actionType)} ( ${moment(dateStart).format("DD/MM/YYYY")} - ${moment(dateEnd).format("DD/MM/YYYY")} )`,
     style: {
-      maxWidth: 70
-    },
-    axis: {
-      x: {
-        labelFormatter: (val) => `${val.substring(0, 20)} ...`,
-      },
+      maxWidth: 100
     },
     autoFit: true,
-    // style: {
-    //   fill: ({ type }) => {
-    //     if (type === '10-30分' || type === '30+分') {
-    //       return '#22CBCC';
-    //     }
-    //     return '#2989FF';
-    //   },
-    // },
-    // label: {
-    //   text: (originData) => {
-    //     const val = parseFloat(originData.value);
-    //     if (val < 0.05) {
-    //       return (val * 100).toFixed(1) + '%';
-    //     }
-    //     return '';
-    //   },
-    //   offset: 10,
-    // },
+    colorField: 'name',
+    axis: {
+      x: {
+        // size: 12,
+        labelFormatter: (datum, index) => {
+          return styleXAxis(datum, index)
+        },
+        // labelFormatter: (val) => `${val.substring(0, 20)} ...`,
+      },
+    },
     legend: false,
+    onReady: (plot) => (chartRef.current = plot),
   };
 
   return (
@@ -154,7 +131,19 @@ function DashboardPage() {
             moment(moment().startOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY"),
             moment(moment().endOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY")
           ]}
-          onChange={(v) => console.log("v", v)}
+          onChange={(v) => {
+            // console.log("v", v)
+            if (v?.length > 0) {
+              const start = moment(v[0]?.$d).format()
+              const end = moment(v[1]?.$d).format()
+              setDateStart(start)
+              setDateEnd(end)
+              // console.log("data", { start, end })
+            } else {
+              setDateStart("")
+              setDateEnd("")
+            }
+          }}
         />
       </div>
 
