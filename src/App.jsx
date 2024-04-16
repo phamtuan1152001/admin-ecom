@@ -154,22 +154,17 @@ const App = () => {
   } = theme.useToken();
 
   const isAuthenticated = JSON.parse(localStorage.getItem("USER_INFO"))?.accessToken
-  // console.log("isAuthenticated", isAuthenticated);
-
-  useEffect(() => {
-    const isLogin = isAuthenticated ? true : false;
-    if (isLogin) {
-      apiMethod.defaults.headers.common["Authorization"] = isAuthenticated;
-    }
-  }, [isAuthenticated])
 
   if (!isAuthenticated) {
     return <Authentication />
   }
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
+    // const { data } = await apiMethod.get("/auth/logout")
+    // if (data?.retCode === 0) {
+    // }
   }
   // console.log("activeRoute", activeRoute);
 

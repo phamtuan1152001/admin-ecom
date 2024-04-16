@@ -29,6 +29,7 @@ function DashboardPage() {
     const req = {
       page: PAGE_SIZE,
       size: PAGE_LIMIT,
+      userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
       action: actionType,
       dateStart,
       dateEnd

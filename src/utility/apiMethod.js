@@ -3,6 +3,10 @@ import { BASE_URL_API_DEV } from '../config/api'
 
 const apiMethod = axios.create({
   baseURL: BASE_URL_API_DEV,
+  headers: {
+    "Authorization": JSON.parse(localStorage.getItem("USER_INFO"))?.accessToken
+  }
+  // withCredentials: true
 })
 
 apiMethod.interceptors.response.use(

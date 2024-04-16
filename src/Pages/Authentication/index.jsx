@@ -28,9 +28,9 @@ function Authentication() {
       const res = await signInAdmin(payload);
       // console.log("res", res);
       if (res?.retCode === SUCCESS) {
-        const accessToken = res?.data?.retData?.accessToken;
+        const accessToken = res?.retData?.accessToken;
         localStorage.setItem("USER_INFO", JSON.stringify(res?.retData));
-        apiMethod.defaults.headers.common["Authorization"] = accessToken;
+        // apiMethod.defaults.headers.common["Authorization"] = accessToken;
         // await dispatch(ActionsUser.setInfoData(res?.data?.retData));
         notification.success({
           message: "Successfully",
