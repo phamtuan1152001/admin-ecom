@@ -54,10 +54,10 @@ const PieChart = ({ revenueType }) => {
   ] : []
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && orderCustomizedProduct.isSuccess) {
       onInitData()
     }
-  }, [isSuccess, revenueType])
+  }, [isSuccess, revenueType, orderCustomizedProduct.isSuccess])
 
   const onInitData = () => {
     const filter = totalData.filter(item => item.statusOrder === 1)

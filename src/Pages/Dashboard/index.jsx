@@ -24,8 +24,8 @@ function DashboardPage() {
 
   const [dateStart, setDateStart] = useState(moment().startOf("M").format())
   const [dateEnd, setDateEnd] = useState(moment().endOf("M").format())
-  const [actionType, setActionType] = useState(2)
-  const [displayType, setDisplayType] = useState(2)
+  const [actionType, setActionType] = useState(1)
+  const [displayType, setDisplayType] = useState(1)
   const [revenueType, setRevenueType] = useState(1)
 
   useEffect(() => {
