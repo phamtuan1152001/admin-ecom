@@ -32,6 +32,10 @@ import Authentication from './Pages/Authentication';
 
 // @constants
 import { ROUTES_LABEL } from './router/constants';
+import { FAIL, SUCCESS } from './constants';
+
+// @services
+import { verifyToken } from './services/service-common';
 
 const ROUTES = [
   {
@@ -155,16 +159,34 @@ const App = () => {
 
   const isAuthenticated = JSON.parse(localStorage.getItem("USER_INFO"))?.accessToken
 
-  if (!isAuthenticated) {
-    return <Authentication />
+  const fetchVerifyToken = async (accessToken) => {
+    try {
+      const res = await verifyToken(accessToken)
+      if (res?.retCode === SUCCESS) {
+        return
+      }
+      // console.log("res", res)
+    } catch (err) {
+      // console.log("FETCHING FAIL!", err)
+      if (err.retCode === FAIL) {
+        handleLogOut()
+      }
+    }
   }
 
   const handleLogOut = async () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
-    // const { data } = await apiMethod.get("/auth/logout")
-    // if (data?.retCode === 0) {
-    // }
+  }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchVerifyToken(isAuthenticated)
+    }
+  }, [])
+
+  if (!isAuthenticated) {
+    return <Authentication />
   }
   // console.log("activeRoute", activeRoute);
 
