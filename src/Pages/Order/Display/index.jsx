@@ -277,14 +277,16 @@ function DisplayOrder() {
             : 1,
           total: page?.totalItems,
           onChange: (pageitem) => {
-            console.log("pageitem", pageitem);
-            // const payload = {
-            //   page: pageitem,
-            //   size: PAGE_LIMIT,
-            //   categories: "",
-            //   productText: ""
-            // };
-            // fetchGetListProducts(payload);
+            // console.log("pageitem", pageitem);
+            const payload = {
+              page: pageitem,
+              size: PAGE_LIMIT,
+              orderText: orderText,
+              userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
+              dateStart: dateFilter.dateStart,
+              dateEnd: dateFilter.dateEnd
+            };
+            fetchGetListOrders(payload);
           },
         }}
       />
