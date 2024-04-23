@@ -6,6 +6,7 @@ import { StyledSelect } from '../../styles/overrides'
 import { SearchByDate } from '../../components/search'
 import { Column } from '@ant-design/charts'
 import { Empty } from "antd";
+import PieChart from './components/PieChart'
 
 // @service
 import { getListRankingProducts } from './service'
@@ -24,6 +25,8 @@ function DashboardPage() {
   const [dateStart, setDateStart] = useState(moment().startOf("M").format())
   const [dateEnd, setDateEnd] = useState(moment().endOf("M").format())
   const [actionType, setActionType] = useState(2)
+  const [displayType, setDisplayType] = useState(2)
+  const [revenueType, setRevenueType] = useState(1)
 
   useEffect(() => {
     const req = {
@@ -80,7 +83,7 @@ function DashboardPage() {
     data: rankingProducts,
     xField: 'name',
     yField: 'value',
-    height: 700,
+    height: 600,
     title: {
       title: `${RENDER_TITLE(actionType)} ( ${moment(dateStart).format("DD/MM/YYYY")} - ${moment(dateEnd).format("DD/MM/YYYY")} )`,
       style: {
@@ -112,57 +115,101 @@ function DashboardPage() {
   };
 
   return (
-    <div className='space-y-8'>
-      <div className='flex flex-row justify-end items-center gap-3 w-[30%]'>
+    <div className='space-y-6'>
+      <div className='flex flex-col justify-start gap-3'>
         <StyledSelect
           className='w-[150px]'
-          defaultValue={2}
+          defaultValue={displayType}
           options={[
             {
               value: 1,
-              label: 'Buy',
+              label: 'Users Action',
             },
             {
               value: 2,
-              label: 'Review',
-            },
-            {
-              value: 3,
-              label: 'Introduction',
-            },
-            {
-              value: 4,
-              label: 'Favourite',
+              label: 'Revenue',
             },
           ]}
-          onChange={(v) => setActionType(v)}
+          onChange={(v) => setDisplayType(v)}
         />
+        {displayType === 1 && (
+          <div className='flex flex-row justify-end items-center gap-3 w-[50%]'>
+            <StyledSelect
+              className='w-[150px]'
+              defaultValue={actionType}
+              options={[
+                {
+                  value: 1,
+                  label: 'Buy',
+                },
+                {
+                  value: 2,
+                  label: 'Review',
+                },
+                {
+                  value: 3,
+                  label: 'Introduction',
+                },
+                {
+                  value: 4,
+                  label: 'Favourite',
+                },
+              ]}
+              onChange={(v) => setActionType(v)}
+            />
 
-        <SearchByDate
-          defaultValue={[
-            moment(moment().startOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY"),
-            moment(moment().endOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY")
-          ]}
-          onChange={(v) => {
-            // console.log("v", v)
-            if (v?.length > 0) {
-              const start = moment(v[0]?.$d).format()
-              const end = moment(v[1]?.$d).format()
-              setDateStart(start)
-              setDateEnd(end)
-              // console.log("data", { start, end })
-            } else {
-              setDateStart("")
-              setDateEnd("")
-            }
-          }}
-        />
+            <SearchByDate
+              defaultValue={[
+                moment(moment().startOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY"),
+                moment(moment().endOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY")
+              ]}
+              onChange={(v) => {
+                // console.log("v", v)
+                if (v?.length > 0) {
+                  const start = moment(v[0]?.$d).format()
+                  const end = moment(v[1]?.$d).format()
+                  setDateStart(start)
+                  setDateEnd(end)
+                  // console.log("data", { start, end })
+                } else {
+                  setDateStart("")
+                  setDateEnd("")
+                }
+              }}
+            />
+          </div>
+        )}
+        {displayType === 2 && (
+          <div className='flex flex-row justify-start items-center gap-3'>
+            <StyledSelect
+              className='w-[200px]'
+              defaultValue={revenueType}
+              options={[
+                {
+                  value: 1,
+                  label: 'Total revenue',
+                },
+                {
+                  value: 2,
+                  label: 'Average Order',
+                },
+                // {
+                //   value: 3,
+                //   label: 'Conversion Rate',
+                // },
+              ]}
+              onChange={(v) => setRevenueType(v)}
+            />
+          </div>
+        )}
       </div>
 
       <div className=''>
-        {rankingProducts?.length > 0
-          ? <Column loading={loading} {...config} />
-          : <Empty />}
+        {displayType === 1
+          ? rankingProducts?.length > 0
+            ? <Column loading={loading} {...config} />
+            : <Empty />
+          : <PieChart revenueType={revenueType} />}
       </div>
     </div>
   )
