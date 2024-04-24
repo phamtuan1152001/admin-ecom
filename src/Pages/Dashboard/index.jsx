@@ -7,6 +7,7 @@ import { SearchByDate } from '../../components/search'
 import { Column } from '@ant-design/charts'
 import { Empty } from "antd";
 import PieChart from './components/PieChart'
+import { Pagination } from "antd";
 
 // @service
 import { getListRankingProducts } from './service'
@@ -24,9 +25,10 @@ function DashboardPage() {
 
   const [dateStart, setDateStart] = useState(moment().startOf("M").format())
   const [dateEnd, setDateEnd] = useState(moment().endOf("M").format())
-  const [actionType, setActionType] = useState(1)
+  const [actionType, setActionType] = useState(2)
   const [displayType, setDisplayType] = useState(1)
   const [revenueType, setRevenueType] = useState(1)
+  const [page, setPage] = useState()
 
   useEffect(() => {
     const req = {
@@ -53,6 +55,7 @@ function DashboardPage() {
           }
         })
         setRankingProducts(list)
+        setPage(rest)
       }
     } catch (err) {
       console.log("FETCHING FAIL!", err)
@@ -210,6 +213,25 @@ function DashboardPage() {
             ? <Column loading={loading} {...config} />
             : <Empty />
           : <PieChart revenueType={revenueType} />}
+      </div>
+
+      <div className='flex flex-row justify-center items-center'>
+        <Pagination
+          defaultCurrent={page?.currentPage ? page?.currentPage + 1 : 1}
+          total={page?.totalItems ?? 1}
+          onChange={(v) => {
+            // console.log("v", v)
+            const req = {
+              page: v,
+              size: PAGE_LIMIT,
+              userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
+              action: actionType,
+              dateStart,
+              dateEnd
+            }
+            fetchGetListRankingProducts(req)
+          }}
+        />
       </div>
     </div>
   )
