@@ -36,8 +36,8 @@ function DashboardPage() {
       size: PAGE_LIMIT,
       userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
       action: actionType,
-      dateStart,
-      dateEnd
+      dateStart: dateStart ? dateStart : moment().startOf("M").format(),
+      dateEnd: dateEnd ? dateEnd : moment().endOf("M").format()
     }
     fetchGetListRankingProducts(req)
   }, [dateStart, dateEnd, actionType])
@@ -88,7 +88,7 @@ function DashboardPage() {
     yField: 'value',
     height: 600,
     title: {
-      title: `${RENDER_TITLE(actionType)} ( ${moment(dateStart).format("DD/MM/YYYY")} - ${moment(dateEnd).format("DD/MM/YYYY")} )`,
+      title: `${RENDER_TITLE(actionType)} ( ${dateStart ? moment(dateStart).format("DD/MM/YYYY") : moment().startOf("M").format("DD/MM/YYYY")} - ${dateEnd ? moment(dateEnd).format("DD/MM/YYYY") : moment().endOf("M").format("DD/MM/YYYY")} )`,
       style: {
         align: "center",
         titleFontSize: 22
@@ -162,12 +162,14 @@ function DashboardPage() {
             />
 
             <SearchByDate
-              defaultValue={[
-                moment(moment().startOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY"),
-                moment(moment().endOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY")
-              ]}
+              // defaultValue={[
+              //   moment(moment().startOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY"),
+              //   moment(moment().endOf("M").format("DD/MM/YYYY"), "DD/MM/YYYY")
+              // ]}
               onChange={(v) => {
-                // console.log("v", v)
+                // const start = moment(v[0]?.$d).format()
+                // const end = moment(v[1]?.$d).format()
+                // console.log("v", { start, end })
                 if (v?.length > 0) {
                   const start = moment(v[0]?.$d).format()
                   const end = moment(v[1]?.$d).format()
