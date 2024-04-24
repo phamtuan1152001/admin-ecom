@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import apiMethod from "../../../utility/apiMethod";
 
-const GET_ORDER_PRODUCTS = "/order/get-list-order-admin"
-const GET_ORDER_CUSTOMIZED_PRODUCTS = "/order-customized-product/getListAdmin"
+const GET_ORDER_PRODUCTS = "/order/get-all"
+const GET_ORDER_CUSTOMIZED_PRODUCTS = "/order-customized-product/get-all"
 const GET_TRACKING_VISISTORS = "/tracking/visitors"
 
 export const orderApi = {

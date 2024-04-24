@@ -26,9 +26,6 @@ const PieChart = ({ revenueType }) => {
 
   const { data, isSuccess, isLoading } = useOrderProducts({
     params: {
-      page: PAGE_SIZE,
-      size: PAGE_LIMIT,
-      orderText: "",
       userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
       dateStart: moment().startOf("Y").format(),
       dateEnd: moment().endOf("Y").format()
@@ -38,9 +35,6 @@ const PieChart = ({ revenueType }) => {
 
   const orderCustomizedProduct = useOrderCustomizedProducts({
     params: {
-      page: PAGE_SIZE,
-      size: PAGE_LIMIT,
-      orderText: "",
       userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
       dateStart: moment().startOf("Y").format(),
       dateEnd: moment().endOf("Y").format()
