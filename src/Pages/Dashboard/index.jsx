@@ -215,24 +215,26 @@ function DashboardPage() {
           : <PieChart revenueType={revenueType} />}
       </div>
 
-      <div className='flex flex-row justify-center items-center'>
-        <Pagination
-          defaultCurrent={page?.currentPage ? page?.currentPage + 1 : 1}
-          total={page?.totalItems ?? 1}
-          onChange={(v) => {
-            // console.log("v", v)
-            const req = {
-              page: v,
-              size: PAGE_LIMIT,
-              userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
-              action: actionType,
-              dateStart,
-              dateEnd
-            }
-            fetchGetListRankingProducts(req)
-          }}
-        />
-      </div>
+      {displayType === 1 && (
+        <div className='flex flex-row justify-center items-center'>
+          <Pagination
+            defaultCurrent={page?.currentPage ? page?.currentPage + 1 : 1}
+            total={page?.totalItems ?? 1}
+            onChange={(v) => {
+              // console.log("v", v)
+              const req = {
+                page: v,
+                size: PAGE_LIMIT,
+                userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
+                action: actionType,
+                dateStart,
+                dateEnd
+              }
+              fetchGetListRankingProducts(req)
+            }}
+          />
+        </div>
+      )}
     </div>
   )
 }
