@@ -221,8 +221,8 @@ function DetailOrder() {
             <div className="flex flex-row justify-between items-center">
               <h3 className="text-base font-normal text-[#637381]">Date of purchase:</h3>
               <h3 className="text-base font-bold text-[#000000]">
-                {moment(detailOrder?.updateAt)?.isValid()
-                  ? moment(detailOrder?.updateAt).format("DD/MM/YYYY HH:MM")
+                {moment(detailOrder?.createdAt)?.isValid()
+                  ? moment(detailOrder?.createdAt).format("DD/MM/YYYY HH:MM")
                   : "--"}
               </h3>
             </div>
