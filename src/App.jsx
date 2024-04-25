@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import apiMethod from './utility/apiMethod';
+import { connect } from "socket.io-client";
+import { BASE_URL_API_DEV } from './config/api';
+const host = BASE_URL_API_DEV;
 
 // @icon
 import {
@@ -150,6 +153,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const activeRoute = location.pathname.substring(1).split("/")
+  const socket = connect(host)
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -183,6 +187,28 @@ const App = () => {
     if (isAuthenticated) {
       fetchVerifyToken(isAuthenticated)
     }
+    /* Setup-socket */
+    // const socket = io();
+    // const socket = connect(host)
+
+    socket.on('connect', () => {
+      console.log('Connected to server');
+    });
+
+    socket.on('notification', (data) => {
+      console.log("data", data)
+    })
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
+
+    return () => {
+      // (socketRef as any).current.disconnect();
+      socket.disconnect()
+    };
+    /* End */
   }, [])
 
   if (!isAuthenticated) {
