@@ -1,14 +1,14 @@
 import React from 'react'
 import { StyledRangeDatePicker } from '../../styles/overrides';
 
-function SearchByDate({ defaultValue = [], onChange = () => { } }) {
+function SearchByDate({ defaultValue = [], className = "", onChange = () => { } }) {
   return (
-    <React.Fragment>
+    <div className={className}>
       <StyledRangeDatePicker
         defaultValue={defaultValue}
         onChange={(v) => onChange(v)}
       />
-    </React.Fragment>
+    </div>
   )
 }
 

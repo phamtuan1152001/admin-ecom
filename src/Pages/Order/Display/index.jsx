@@ -36,6 +36,7 @@ function DisplayOrder() {
     dateStart: "",
     dateEnd: ""
   })
+  const [codeOrder, setCodeOrder] = useState("")
 
   useEffect(() => {
     const req = {
@@ -43,11 +44,12 @@ function DisplayOrder() {
       size: PAGE_LIMIT,
       orderText: orderText,
       userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
+      codeOrder: codeOrder,
       dateStart: dateFilter.dateStart,
       dateEnd: dateFilter.dateEnd
     }
     fetchGetListOrders(req)
-  }, [orderText, dateFilter])
+  }, [orderText, dateFilter, codeOrder])
 
   const fetchGetListOrders = async (payload) => {
     try {
@@ -238,12 +240,23 @@ function DisplayOrder() {
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
           <SearchByText
+            className='w-[400px]'
+            placeholder='Code order'
+            onChange={(value) => {
+              // console.log("value", value);
+              setCodeOrder(value)
+            }}
+          />
+          <SearchByText
+            className='w-[400px]'
+            placeholder='Customer name'
             onChange={(value) => {
               // console.log("value", value);
               setOrderText(value)
             }}
           />
           <SearchByDate
+            className='w-[300px]'
             onChange={(v) => {
               if (!!v) {
                 const start = moment(v[0]?.$d).format()

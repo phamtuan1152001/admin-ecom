@@ -5,7 +5,7 @@ import { StyledInput } from "../../styles/overrides"
 
 let timeoutId;
 
-function SearchByText({ onChange = () => { } }) {
+function SearchByText({ placeholder = "Enter a item", className = "", onChange = () => { } }) {
   // search
   const [input, setInput] = useState("");
   const [prevSearch, setPrevSearch] = useState("");
@@ -31,10 +31,10 @@ function SearchByText({ onChange = () => { } }) {
   };
 
   return (
-    <div className=''>
+    <div className={className}>
       <StyledInput
         value={input}
-        placeholder='Enter a item'
+        placeholder={placeholder}
         onChange={handleSeacrh}
       />
     </div>
