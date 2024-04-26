@@ -50,3 +50,8 @@ export const TYPE_SEEN = {
   SEEN: "seen",
   NOTE_SEEN: "not-seen"
 }
+
+export const TYPE_ORDER = {
+  ORDER_PRODUCT: 1,
+  ORDER_CUSTOMIZED_PRODUCT: 2
+}
