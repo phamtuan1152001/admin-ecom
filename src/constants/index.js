@@ -45,3 +45,8 @@ export const RENDER_TITLE = (type) => {
       return
   }
 }
+
+export const TYPE_SEEN = {
+  SEEN: "seen",
+  NOTE_SEEN: "not-seen"
+}

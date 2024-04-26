@@ -136,7 +136,7 @@ function DashboardPage() {
           onChange={(v) => setDisplayType(v)}
         />
         {displayType === 1 && (
-          <div className='flex flex-row justify-end items-center gap-3 w-[50%]'>
+          <div className='flex flex-row justify-start items-center gap-3 w-[50%]'>
             <StyledSelect
               className='w-[150px]'
               defaultValue={actionType}
