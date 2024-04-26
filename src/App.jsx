@@ -21,7 +21,7 @@ import {
 } from '@ant-design/icons';
 
 // @antd
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, notification } from 'antd';
 import { StyledSider } from './styles/overrides';
 const { Header, Content } = Layout;
 import {
@@ -42,8 +42,10 @@ import { FAIL, PAGE_LIMIT, PAGE_SIZE, SUCCESS } from './constants';
 
 // @services
 import { verifyToken } from './services/service-common';
-import { getListNotification, resetNotification } from './redux/notification/actions';
 import { listNotificationRedux, loadingNotificationRedux, failNotificationRedux, successNotificationRedux } from './redux/notification/selectors';
+
+// @actions
+import { getListNotification, resetNotification } from './redux/notification/actions';
 
 const ROUTES = [
   {
@@ -200,29 +202,39 @@ const App = () => {
   useEffect(() => {
     if (isAuthenticated) {
       fetchVerifyToken(isAuthenticated)
+      /* Setup-socket */
+      // const socket = connect(host)
+
+      socket.on('connect', () => {
+        console.log('Connected to server');
+      });
+
+      socket.on('notification', (data) => {
+        // console.log("data", data)
+        notification.info({
+          message: data?.title,
+          description: data?.description,
+          duration: 10,
+        });
+        dispatch(
+          getListNotification({
+            page: PAGE_SIZE,
+            size: PAGE_LIMIT,
+            userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+          })
+        )
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+
+
+      return () => {
+        socket.disconnect()
+      };
+      /* End */
     }
-    /* Setup-socket */
-    // const socket = io();
-    // const socket = connect(host)
-
-    socket.on('connect', () => {
-      console.log('Connected to server');
-    });
-
-    socket.on('notification', (data) => {
-      console.log("data", data)
-    })
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-    });
-
-
-    return () => {
-      // (socketRef as any).current.disconnect();
-      socket.disconnect()
-    };
-    /* End */
   }, [])
 
   if (!isAuthenticated) {
@@ -285,15 +297,6 @@ const App = () => {
               >
                 <NotificationOutlined
                   style={{ fontSize: 24 }}
-                  onClick={() => {
-                    dispatch(
-                      getListNotification({
-                        page: PAGE_SIZE,
-                        size: PAGE_LIMIT,
-                        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
-                      })
-                    )
-                  }}
                 />
               </Badge>
               <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
