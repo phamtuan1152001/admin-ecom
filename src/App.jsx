@@ -4,6 +4,7 @@ import apiMethod from './utility/apiMethod';
 import { connect } from "socket.io-client";
 import { BASE_URL_API_DEV } from './config/api';
 const host = BASE_URL_API_DEV;
+import { useDispatch, useSelector } from 'react-redux';
 
 // @icon
 import {
@@ -15,7 +16,8 @@ import {
   SwitcherOutlined,
   DatabaseOutlined,
   UserOutlined,
-  MonitorOutlined
+  MonitorOutlined,
+  NotificationOutlined,
 } from '@ant-design/icons';
 
 // @antd
@@ -25,6 +27,7 @@ const { Header, Content } = Layout;
 import {
   LogoutOutlined
 } from '@ant-design/icons';
+import { Badge } from 'antd';
 
 // @routes
 import RoutesComponents from './router';
@@ -35,10 +38,12 @@ import Authentication from './Pages/Authentication';
 
 // @constants
 import { ROUTES_LABEL } from './router/constants';
-import { FAIL, SUCCESS } from './constants';
+import { FAIL, PAGE_LIMIT, PAGE_SIZE, SUCCESS } from './constants';
 
 // @services
 import { verifyToken } from './services/service-common';
+import { getListNotification, resetNotification } from './redux/notification/actions';
+import { listNotificationRedux, loadingNotificationRedux, failNotificationRedux, successNotificationRedux } from './redux/notification/selectors';
 
 const ROUTES = [
   {
@@ -150,6 +155,14 @@ const ROUTES = [
 ];
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  const listNoti = useSelector(listNotificationRedux)
+  const loadingNoti = useSelector(loadingNotificationRedux)
+  const failNoti = useSelector(failNotificationRedux)
+  const successNoti = useSelector(successNotificationRedux)
+  // console.log("notifications", { listNoti, loadingNoti, failNoti, successNoti })
+
   const navigate = useNavigate();
   const location = useLocation();
   const activeRoute = location.pathname.substring(1).split("/")
@@ -181,6 +194,7 @@ const App = () => {
   const handleLogOut = async () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
+    dispatch(resetNotification())
   }
 
   useEffect(() => {
@@ -264,9 +278,27 @@ const App = () => {
                 height: 64,
               }}
             />
-            <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
-              <div className='flex flex-col justify-center items-center'><LogoutOutlined /></div>
-              <h3>Logout</h3>
+            <div className='flex flex-row justify-between items-center gap-x-6'>
+              <Badge
+                count={listNoti?.notifications?.length}
+                className='cursor-pointer'
+              >
+                <NotificationOutlined
+                  style={{ fontSize: 24 }}
+                  onClick={() => {
+                    dispatch(
+                      getListNotification({
+                        page: PAGE_SIZE,
+                        size: PAGE_LIMIT,
+                        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+                      })
+                    )
+                  }}
+                />
+              </Badge>
+              <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
+                <div className='flex flex-col justify-center items-center'><LogoutOutlined style={{ fontSize: 24 }} /></div>
+              </div>
             </div>
           </div>
         </Header>
