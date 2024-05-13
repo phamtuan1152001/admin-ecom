@@ -13,14 +13,14 @@ function NotificationChild({ isLoading = false, data, onSubmit = () => { } }) {
   // console.log("data", data)
 
   return (
-    <Spin spinning={isLoading}>
-      <div className='flex flex-col justify-start gap-y-4'>
+    <Spin spinning={isLoading} className=''>
+      <div className='flex flex-col justify-start gap-y-4 px-4 h-[750px] overflow-auto pt-1'>
         {data?.notifications?.map((item, index) => {
           return (
             <Badge
               key={`${item?._id}-${index}`}
               className={classNames(
-                "flex flex-col justify-start gap-1 p-3 rounded-lg",
+                "flex flex-col justify-start gap-1 p-3 rounded-lg w-full",
                 item?.status === TYPE_SEEN.NOTE_SEEN ? "bg-gray-100" : ""
               )}
               dot={item?.status === TYPE_SEEN.NOTE_SEEN}
@@ -34,7 +34,7 @@ function NotificationChild({ isLoading = false, data, onSubmit = () => { } }) {
 
                 <StyledButton
                   className={"bg-[#333333] text-white text-base h-[35px] px-4"}
-                  onClick={() => onSubmit(item?.typeOrder, item?.idOrder, item?._id)}
+                  onClick={() => onSubmit(item?.typeOrder, item?.idOrder, item?._id, item?.status)}
                 >
                   Review
                 </StyledButton>

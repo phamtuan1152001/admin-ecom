@@ -91,8 +91,10 @@ function Notification() {
         }
         if (typeOrder === TYPE_ORDER.ORDER_PRODUCT) {
           fetchDetailOrderProduct(payload)
-        } else {
+        } else if (typeOrder === TYPE_ORDER.ORDER_CUSTOMIZED_PRODUCT) {
           fetchDetailOrderCustomizedProduct(payload)
+        } else {
+          navigate(ROUTES.CUSTOMIZED_PRODUCT)
         }
       }
     } catch (err) {
@@ -108,12 +110,27 @@ function Notification() {
         <NotificationChild
           isLoading={loading}
           data={listNoti}
-          onSubmit={(typeOrder, idOrder, notificationId) => {
-            const req = {
-              notificationId: notificationId,
-              userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+          onSubmit={(typeOrder, idOrder, notificationId, status) => {
+            // console.log("test", status)
+            if (status === TYPE_SEEN.NOTE_SEEN) {
+              const req = {
+                notificationId: notificationId,
+                userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+              }
+              fetchUpdateStatusNotification(req, typeOrder, idOrder)
+            } else {
+              const payload = {
+                orderId: idOrder,
+                userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+              }
+              if (typeOrder === TYPE_ORDER.ORDER_PRODUCT) {
+                fetchDetailOrderProduct(payload)
+              } else if (typeOrder === TYPE_ORDER.ORDER_CUSTOMIZED_PRODUCT) {
+                fetchDetailOrderCustomizedProduct(payload)
+              } else {
+                navigate(ROUTES.CUSTOMIZED_PRODUCT)
+              }
             }
-            fetchUpdateStatusNotification(req, typeOrder, idOrder)
           }}
         />
       }
