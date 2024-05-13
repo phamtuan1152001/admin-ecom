@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { BASE_URL_API_DEV } from '../../config/api';
+import { connect } from "socket.io-client";
+const host = BASE_URL_API_DEV;
 
 // @antd
 import { Table, notification, Input } from "antd";
@@ -22,6 +25,8 @@ import {
   updateStatusProductAdmin,
   deleteDetailCustomizedProductAdmin
 } from './services';
+import { pushNotiToClientForConfirming } from '../../redux/notification/services';
+
 // @constants
 import {
   PAGE_LIMIT,
@@ -35,6 +40,7 @@ import Dialog from '../../components/dialog';
 
 const CustomizedProduct = () => {
   const navigate = useNavigate()
+  const socket = connect(host)
 
   const [loading, setLoading] = useState(false)
 
@@ -206,6 +212,23 @@ const CustomizedProduct = () => {
     setIsOpenModal(!isOpenModal)
   }
 
+  const fetchPushNotiToClientForConfirming = async (values) => {
+    try {
+      const req = {
+        userId: values?.userId,
+        mainUserId: values?.clientId,
+        code: values?.code,
+        typeConfirm: values?.statusProductAdmin
+      }
+      const res = await pushNotiToClientForConfirming(req)
+      if (res?.retCode === SUCCESS) {
+        socket.emit("reviewCustomizedProduct", res?.retData)
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
+    }
+  }
+
   const fetchUpdateStatusCustomizedProduct = async (values) => {
     // console.log("v", values)
     try {
@@ -225,6 +248,9 @@ const CustomizedProduct = () => {
           search: search
         }
         fetchGetListCustomizedProducts(req)
+        /* Notification */
+        fetchPushNotiToClientForConfirming(values)
+        /*  */
       }
     } catch (err) {
       console.log("FETCHING FAIL!", err)

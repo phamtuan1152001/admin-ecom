@@ -11,3 +11,4 @@ export const SET_LOADING_NOTIFICATION = "SET_LOADING_NOTIFICATION"
 // API
 export const GET_LIST_NOTIFICATION_API = "/notification/get-notifications-admin"
 export const UPDATE_NOTIFICATION_STATUS_API = "/notification/update-notification-status"
+export const PUSH_NOTI_TO_CLIENT_FOR_CONFIRM = "/notification/push-noti-confirm-customized-product"
