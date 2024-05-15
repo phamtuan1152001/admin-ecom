@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import moment from 'moment';
-
+import { connect } from "socket.io-client";
 // @antd
 import { Spin, notification } from "antd"
 import { StyledButton } from '../../../styles/overrides';
 
 // @constants
 import { SUCCESS, PAYMENT_METHOD_TYPE } from '../../../constants';
+import { BASE_URL_API_DEV } from '../../../config/api';
+const host = BASE_URL_API_DEV;
 
 // @icon
 import { SuccessStatus, FailStatus, PendingStatus, CartIcon } from '../../../assets/svg';
@@ -17,6 +19,7 @@ import {
   getDetailOrderCustomizedProductAdmin,
   updateDetailOrderCustomizedProductAdmin
 } from '../services';
+import { sendNotiToClient } from '../../Order/service';
 
 // @utility
 import { formatToCurrencyVND } from '../../../utility';
@@ -24,6 +27,7 @@ import { formatToCurrencyVND } from '../../../utility';
 function UpdateOrderCustomizedProduct() {
   const navigate = useNavigate();
   const location = useLocation();
+  const socket = connect(host)
 
   // console.log("location", location);
   const { orderInfo } = location.state || {}
@@ -56,7 +60,7 @@ function UpdateOrderCustomizedProduct() {
 
   const fetchUpdateStatusOrderCustomizedProduct = async (type) => {
     try {
-      // setLoading(true)
+      setLoading(true)
       const req = {
         ...detailOrder,
         statusOrder: type,
@@ -76,11 +80,31 @@ function UpdateOrderCustomizedProduct() {
           userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
         }
         fetchDetailOrderCustomizedProductAdmin(req)
+        fetchSendNotiToClient(type)
       }
     } catch (err) {
       console.log("FETCHING FAIL!", err);
     } finally {
-      // setLoading(false)
+      setLoading(false)
+    }
+  }
+
+  const fetchSendNotiToClient = async (typePayment) => {
+    try {
+      const req = {
+        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
+        mainUserId: detailOrder?.userId,
+        typeOrder: 2,
+        idOrder: detailOrder?._id,
+        typePayment: typePayment,
+      }
+      // console.log("req", req)
+      const res = await sendNotiToClient(req)
+      if (res?.retCode === SUCCESS) {
+        socket.emit("updateStatusOrderClient", res?.retData)
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
     }
   }
 
