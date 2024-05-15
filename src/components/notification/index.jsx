@@ -25,6 +25,7 @@ import { getListNotification } from '../../redux/notification/actions';
 // @service
 import { getDetailOrderAdmin } from '../../Pages/Order/service';
 import { getDetailOrderCustomizedProductAdmin } from '../../Pages/OrderCustomizedProduct/services';
+import { readAllNotification } from '../../redux/notification/services';
 
 function Notification() {
   const dispatch = useDispatch()
@@ -104,6 +105,29 @@ function Notification() {
     }
   }
 
+  const handleReadAllNotification = async () => {
+    // console.log("read-all")
+    try {
+      setLoading(true)
+      const req = {
+        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
+        userType: "admin"
+      }
+      const res = await readAllNotification(req)
+      if (res.retCode === SUCCESS) {
+        dispatch(getListNotification({
+          page: PAGE_SIZE,
+          size: PAGE_LIMIT,
+          userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+        }))
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Popover
       content={
@@ -132,10 +156,11 @@ function Notification() {
               }
             }
           }}
+          onReadAllNoti={() => handleReadAllNotification()}
         />
       }
       title="Notification"
-      trigger="hover"
+      trigger="click"
       open={open}
       onOpenChange={handleOpenChange}
     >
