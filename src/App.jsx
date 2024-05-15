@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
-import apiMethod from './utility/apiMethod';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { connect } from "socket.io-client";
+import { BASE_URL_API_DEV } from './config/api';
+const host = BASE_URL_API_DEV;
+import { useDispatch, } from 'react-redux';
 
 // @icon
 import {
@@ -12,11 +15,11 @@ import {
   SwitcherOutlined,
   DatabaseOutlined,
   UserOutlined,
-  MonitorOutlined
+  MonitorOutlined,
 } from '@ant-design/icons';
 
 // @antd
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, notification } from 'antd';
 import { StyledSider } from './styles/overrides';
 const { Header, Content } = Layout;
 import {
@@ -29,13 +32,17 @@ import { generateLink } from './utility';
 
 // @components
 import Authentication from './Pages/Authentication';
+import Notification from "./components/notification"
 
 // @constants
 import { ROUTES_LABEL } from './router/constants';
-import { FAIL, SUCCESS } from './constants';
+import { FAIL, PAGE_LIMIT, PAGE_SIZE, SUCCESS } from './constants';
 
 // @services
 import { verifyToken } from './services/service-common';
+
+// @actions
+import { getListNotification, resetNotification } from './redux/notification/actions';
 
 const ROUTES = [
   {
@@ -147,9 +154,12 @@ const ROUTES = [
 ];
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const navigate = useNavigate();
   const location = useLocation();
   const activeRoute = location.pathname.substring(1).split("/")
+  const socket = connect(host)
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -177,11 +187,49 @@ const App = () => {
   const handleLogOut = async () => {
     localStorage.removeItem("USER_INFO")
     window.location.href = "/"
+    dispatch(resetNotification())
   }
 
   useEffect(() => {
     if (isAuthenticated) {
       fetchVerifyToken(isAuthenticated)
+      dispatch(getListNotification({
+        page: PAGE_SIZE,
+        size: PAGE_LIMIT,
+        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+      }))
+      /* Setup-socket */
+      // const socket = connect(host)
+
+      socket.on('connect', () => {
+        console.log('Connected to server');
+      });
+
+      socket.on('notification', (data) => {
+        // console.log("data", data)
+        notification.info({
+          message: data?.title,
+          description: data?.description,
+          duration: 10,
+        });
+        dispatch(
+          getListNotification({
+            page: PAGE_SIZE,
+            size: PAGE_LIMIT,
+            userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
+          })
+        )
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+
+
+      return () => {
+        socket.disconnect()
+      };
+      /* End */
     }
   }, [])
 
@@ -238,9 +286,11 @@ const App = () => {
                 height: 64,
               }}
             />
-            <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
-              <div className='flex flex-col justify-center items-center'><LogoutOutlined /></div>
-              <h3>Logout</h3>
+            <div className='flex flex-row justify-between items-center gap-x-6'>
+              <Notification />
+              <div className='flex flex-row justify-center items-center gap-x-2 cursor-pointer' onClick={() => handleLogOut()}>
+                <div className='flex flex-col justify-center items-center'><LogoutOutlined style={{ fontSize: 24 }} /></div>
+              </div>
             </div>
           </div>
         </Header>

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import moment from 'moment';
+import { BASE_URL_API_DEV } from '../../../config/api';
+import { connect } from "socket.io-client";
+const host = BASE_URL_API_DEV;
 
 // @antd
 import { Spin, notification } from "antd"
@@ -13,7 +16,7 @@ import { PAYMENT_METHOD_TYPE, SUCCESS } from '../../../constants';
 import { formatToCurrencyVND } from '../../../utility';
 
 // @service
-import { getDetailOrderAdmin, updateStatusOrderAdmin } from '../service';
+import { getDetailOrderAdmin, updateStatusOrderAdmin, sendNotiToClient } from '../service';
 
 // @icon
 import { CartIcon, SuccessStatus, FailStatus, PendingStatus } from '../../../assets/svg';
@@ -21,12 +24,14 @@ import { CartIcon, SuccessStatus, FailStatus, PendingStatus } from '../../../ass
 function DetailOrder() {
   const navigate = useNavigate();
   const location = useLocation();
+  const socket = connect(host)
 
   // console.log("location", location);
   const { orderInfo } = location.state || {}
 
   const [loading, setLoading] = useState(false)
   const [detailOrder, setDetailOrder] = useState({})
+  const [loadingUpdate, setLoadingUpdate] = useState(false)
 
   useEffect(() => {
     const req = {
@@ -53,7 +58,7 @@ function DetailOrder() {
 
   const fetchUpdateStatusOrder = async (type) => {
     try {
-      // setLoading(true)
+      setLoadingUpdate(true)
       const req = {
         ...detailOrder,
         statusOrder: type,
@@ -72,11 +77,31 @@ function DetailOrder() {
           userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
         }
         fetchDetailOrderAdmin(req)
+        fetchSendNotiToClient(type)
       }
     } catch (err) {
       console.log("FETCHING FAIL!", err);
     } finally {
-      // setLoading(false)
+      setLoadingUpdate(false)
+    }
+  }
+
+  const fetchSendNotiToClient = async (typePayment) => {
+    try {
+      const req = {
+        userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id,
+        mainUserId: detailOrder?.userId,
+        typeOrder: 1,
+        idOrder: detailOrder?._id,
+        typePayment: typePayment,
+      }
+      // console.log("req", req)
+      const res = await sendNotiToClient(req)
+      if (res?.retCode === SUCCESS) {
+        socket.emit("updateStatusOrderClient", res?.retData)
+      }
+    } catch (err) {
+      console.log("FETCHING FAIL!", err)
     }
   }
 
@@ -249,12 +274,14 @@ function DetailOrder() {
               <StyledButton
                 className={"bg-[#333333] text-white text-base h-[35px] px-4"}
                 onClick={() => fetchUpdateStatusOrder(1)}
+                loading={loadingUpdate}
               >
                 Update Status Successfully
               </StyledButton>
               <StyledButton
                 className={"bg-[#333333] text-white text-base h-[35px] px-4"}
                 onClick={() => fetchUpdateStatusOrder(2)}
+                loading={loadingUpdate}
               >
                 Update Status Cancel
               </StyledButton>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import apiMethod from '../../utility/apiMethod';
 
 // @components
 import { Form, Input, Button, notification } from "antd";
@@ -18,13 +17,14 @@ import { signInAdmin } from './services';
 
 function Authentication() {
   const [form] = Form.useForm();
-  // const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(true);
 
   const onFinish = async (payload) => {
     // console.log("values", payload);
     try {
+      setLoading(true)
       const res = await signInAdmin(payload);
       // console.log("res", res);
       if (res?.retCode === SUCCESS) {
@@ -54,6 +54,8 @@ function Authentication() {
         description: `Login unsuccessfully - ${err.retText}`,
         duration: 2,
       });
+    } finally {
+      setLoading(false)
     }
   };
 
