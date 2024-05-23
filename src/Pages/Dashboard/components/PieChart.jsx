@@ -102,7 +102,8 @@ const PieChart = ({ revenueType }) => {
         const aov = listMonthOfYear?.map((item) => {
           return {
             month: item.month,
-            value: monthCounts.hasOwnProperty(item.month) ? item.value / monthCounts[item.month] : item.value
+            value: monthCounts.hasOwnProperty(item.month) ? item.value / monthCounts[item.month] : item.value,
+            orders: monthCounts[item.month]
           }
         })
         setDisplayData(aov)
@@ -163,7 +164,10 @@ const PieChart = ({ revenueType }) => {
           return (
             <div className='flex flex-row justify-between items-center w-[160px]'>
               <h1 className='text-lg font-bold'>{`${title}/${moment().format("YYYY")}`}:</h1>
-              <p className='text-base font-semibold'>{formatToCurrencyVND(items[0].value)}</p>
+              <div className='flex flex-col justify-start'>
+                <p className='text-base font-semibold'>{formatToCurrencyVND(items[0].value)}</p>
+                <p className='text-xs font-semibold'>Orders: {displayData.find(item => item?.month === parseInt(title))?.orders}</p>
+              </div>
             </div>
           )
         }
