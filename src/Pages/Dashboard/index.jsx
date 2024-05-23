@@ -15,6 +15,7 @@ import { getListRankingProducts } from './service'
 // constants
 import { PAGE_SIZE, PAGE_LIMIT, SUCCESS } from '../../constants'
 import { TYPE_FILTER, RENDER_TITLE } from '../../constants'
+import CommonChart from './components/CommonChart'
 
 function DashboardPage() {
   const chartRef = useRef(null);
@@ -117,6 +118,21 @@ function DashboardPage() {
     onReady: (plot) => (chartRef.current = plot),
   };
 
+  const renderChart = (type) => {
+    switch (type) {
+      case 1:
+        return rankingProducts?.length > 0
+          ? <Column loading={loading} {...config} />
+          : <Empty />
+      case 2:
+        return <PieChart revenueType={revenueType} />
+      case 3:
+        return <CommonChart />
+      default:
+        return null
+    }
+  }
+
   return (
     <div className='space-y-6'>
       <div className='flex flex-col justify-start gap-3'>
@@ -132,6 +148,10 @@ function DashboardPage() {
               value: 2,
               label: 'Revenue',
             },
+            {
+              value: 3,
+              label: 'Common',
+            }
           ]}
           onChange={(v) => setDisplayType(v)}
         />
@@ -210,11 +230,7 @@ function DashboardPage() {
       </div>
 
       <div className=''>
-        {displayType === 1
-          ? rankingProducts?.length > 0
-            ? <Column loading={loading} {...config} />
-            : <Empty />
-          : <PieChart revenueType={revenueType} />}
+        {renderChart(displayType)}
       </div>
 
       {displayType === 1 && (
