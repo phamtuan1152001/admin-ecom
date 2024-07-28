@@ -19,6 +19,7 @@ import ImageUpload from "../../../components/upload-image/Upload";
 // @constants
 import { SUCCESS, PAGE_SIZE, PAGE_LIMIT } from "../../../constants";
 import { ROUTES } from "../../../router/constants";
+import { generatingRandomCode } from '../../../utility'
 
 // @services
 import { createImport, getListImports } from "../service";
@@ -62,7 +63,7 @@ function CreateManageImport() {
   }
 
   const onInitCodeImport = (list) => {
-    form.setFieldValue("code", `I${list.length + 1}`)
+    form.setFieldValue("code", generatingRandomCode())
   }
 
   const onFinish = async (values) => {
@@ -71,7 +72,7 @@ function CreateManageImport() {
       setLoading(true)
       const req = {
         ...values,
-        code: `ECOM-${values?.code}`,
+        code: `ECOM${values?.code}`,
         userId: JSON.parse(localStorage.getItem("USER_INFO"))?.id
       }
       const res = await createImport(req)

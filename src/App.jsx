@@ -126,31 +126,31 @@ const ROUTES = [
       },
     ],
   },
-  {
-    key: "vouchers",
-    icon: <SwitcherOutlined />,
-    label: ROUTES_LABEL.VOUCHER_LABEL,
-    // children: [
-    //   {
-    //     key: "display-voucher",
-    //     icon: <HomeOutlined />,
-    //     label: ROUTES_LABEL.DISPLAY_VOUCHER,
-    //     // children: [],
-    //   },
-    //   {
-    //     key: "create-voucher",
-    //     icon: <HomeOutlined />,
-    //     label: ROUTES_LABEL.CREATE_VOUCHER,
-    //     // children: [],
-    //   },
-    // ],
-  },
-  {
-    key: "others",
-    icon: <DatabaseOutlined />,
-    label: "Others",
-    // children: [],
-  },
+  // {
+  //   key: "vouchers",
+  //   icon: <SwitcherOutlined />,
+  //   label: ROUTES_LABEL.VOUCHER_LABEL,
+  //   // children: [
+  //   //   {
+  //   //     key: "display-voucher",
+  //   //     icon: <HomeOutlined />,
+  //   //     label: ROUTES_LABEL.DISPLAY_VOUCHER,
+  //   //     // children: [],
+  //   //   },
+  //   //   {
+  //   //     key: "create-voucher",
+  //   //     icon: <HomeOutlined />,
+  //   //     label: ROUTES_LABEL.CREATE_VOUCHER,
+  //   //     // children: [],
+  //   //   },
+  //   // ],
+  // },
+  // {
+  //   key: "others",
+  //   icon: <DatabaseOutlined />,
+  //   label: "Others",
+  //   // children: [],
+  // },
 ];
 
 const App = () => {

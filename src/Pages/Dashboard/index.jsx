@@ -169,10 +169,10 @@ function DashboardPage() {
                   value: 2,
                   label: 'Review',
                 },
-                {
-                  value: 3,
-                  label: 'Introduction',
-                },
+                // {
+                //   value: 3,
+                //   label: 'Introduction',
+                // },
                 {
                   value: 4,
                   label: 'Favourite',

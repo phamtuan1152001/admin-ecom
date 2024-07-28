@@ -29,6 +29,7 @@ function OrderCustomizedProduct() {
   const [page, setPage] = useState({});
   const [listOrders, setListOrders] = useState([])
   const [orderText, setOrderText] = useState("")
+  const [codeOrder, setCodeOrder] = useState("")
   const [dateFilter, setDateFilter] = useState({
     dateStart: "",
     dateEnd: ""
@@ -39,12 +40,13 @@ function OrderCustomizedProduct() {
       page: PAGE_SIZE,
       size: PAGE_LIMIT,
       orderText: orderText,
+      codeOrder: codeOrder,
       userId: JSON.parse(localStorage.getItem("USER_INFO")).id,
       dateStart: dateFilter.dateStart,
       dateEnd: dateFilter.dateEnd
     }
     fetchGetListOrdersCustomizedProductAdmin(req)
-  }, [orderText, dateFilter])
+  }, [orderText, dateFilter, codeOrder])
 
   const fetchGetListOrdersCustomizedProductAdmin = async (payload) => {
     try {
@@ -258,6 +260,13 @@ function OrderCustomizedProduct() {
             onChange={(value) => {
               // console.log("value", value);
               setOrderText(value)
+            }}
+          />
+          <SearchByText
+            placeholder='Enter code order'
+            onChange={(value) => {
+              console.log("value", value);
+              setCodeOrder(value)
             }}
           />
           <SearchByDate
