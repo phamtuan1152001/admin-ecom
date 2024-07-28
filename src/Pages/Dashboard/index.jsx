@@ -173,10 +173,10 @@ function DashboardPage() {
                 //   value: 3,
                 //   label: 'Introduction',
                 // },
-                {
-                  value: 4,
-                  label: 'Favourite',
-                },
+                // {
+                //   value: 4,
+                //   label: 'Favourite',
+                // },
               ]}
               onChange={(v) => setActionType(v)}
             />

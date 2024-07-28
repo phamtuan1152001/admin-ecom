@@ -257,6 +257,7 @@ function OrderCustomizedProduct() {
         </StyledButton>
         <div className='flex flex-row justify-between items-center gap-x-4'>
           <SearchByText
+            placeholder='Enter customer name'
             onChange={(value) => {
               // console.log("value", value);
               setOrderText(value)
